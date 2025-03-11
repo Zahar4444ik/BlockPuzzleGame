@@ -15,7 +15,7 @@ public class BlockPuzzleConsole {
     private GameState gameState;
     private final InputHandler inputHandler;
 
-    public BlockPuzzleConsole(int rows, int cols) {
+    public BlockPuzzleConsole() {
         this.inputHandler = new InputHandler();
         this.gameState = GameState.MENU;
     }

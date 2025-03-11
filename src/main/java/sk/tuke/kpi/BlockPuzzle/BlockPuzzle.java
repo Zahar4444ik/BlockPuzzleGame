@@ -4,7 +4,7 @@ import sk.tuke.kpi.BlockPuzzle.consoleui.BlockPuzzleConsole;
 
 public class BlockPuzzle {
     public static void main(String[] args) {
-        BlockPuzzleConsole game = new BlockPuzzleConsole(5, 5);
+        BlockPuzzleConsole game = new BlockPuzzleConsole();
         game.start();
     }
 }

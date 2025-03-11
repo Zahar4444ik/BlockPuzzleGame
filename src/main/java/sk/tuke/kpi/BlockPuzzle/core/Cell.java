@@ -1,7 +1,11 @@
 package sk.tuke.kpi.BlockPuzzle.core;
 
+import lombok.Getter;
+import lombok.Setter;
 import sk.tuke.kpi.BlockPuzzle.consoleui.ConsoleColor;
 
+@Setter
+@Getter
 public class Cell {
     private char symbol;
     private ConsoleColor color;
@@ -13,22 +17,6 @@ public class Cell {
 
     public Cell(ConsoleColor color){
         this.symbol = CellState.FILLED.getSymbol();
-        this.color = color;
-    }
-
-    public char getSymbol() {
-        return symbol;
-    }
-
-    public ConsoleColor getColor() {
-        return color;
-    }
-
-    public void setSymbol(char symbol) {
-        this.symbol = symbol;
-    }
-
-    public void setColor(ConsoleColor color) {
         this.color = color;
     }
 

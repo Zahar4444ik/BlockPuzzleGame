@@ -1,8 +1,10 @@
 package sk.tuke.kpi.BlockPuzzle.core.blocks;
 
+import lombok.Getter;
 import sk.tuke.kpi.BlockPuzzle.consoleui.ConsoleColor;
 import sk.tuke.kpi.BlockPuzzle.core.Cell;
 
+@Getter
 public class Block {
     private final Cell[][] shape;
     private final ConsoleColor color;
@@ -10,14 +12,6 @@ public class Block {
     public Block(Cell[][] shape, ConsoleColor color) {
         this.shape = shape;
         this.color = color;
-    }
-
-    public ConsoleColor getColor() {
-        return color;
-    }
-
-    public Cell[][] getShape() {
-        return shape;
     }
 
     public int getWidth() {

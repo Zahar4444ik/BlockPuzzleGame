@@ -4,10 +4,9 @@ import lombok.Getter;
 
 import java.util.Objects;
 
+@Getter
 public class Position {
-    @Getter
     private final int row;
-    @Getter
     private final int col;
 
     @Override

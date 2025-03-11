@@ -2,17 +2,12 @@ package sk.tuke.kpi.BlockPuzzle.game.levels;
 
 public class LevelFactory {
     public static Level createLevel(GameLevels level) {
-        switch (level){
-            case EASY:
-                return new EasyLevel();
-            case MEDIUM:
-                return new MediumLevel();
-            case HARD:
-                return new HardLevel();
-            case EXPERT:
-                return new EasyLevel();
-            default:
-                return null;
-        }
+        return switch (level) {
+            case EASY -> new EasyLevel();
+            case MEDIUM -> new MediumLevel();
+            case HARD -> new HardLevel();
+            case EXPERT -> new EasyLevel();
+            default -> null;
+        };
     }
 }

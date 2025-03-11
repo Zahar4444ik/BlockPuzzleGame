@@ -1,5 +1,8 @@
 package sk.tuke.kpi.BlockPuzzle.core;
 
+import lombok.Getter;
+
+@Getter
 public enum CellState {
     EMPTY_BOARD('.'),
     EMPTY_BLOCK(' '),
@@ -11,7 +14,4 @@ public enum CellState {
         this.symbol = symbol;
     }
 
-    public char getSymbol() {
-        return symbol;
-    }
 }
