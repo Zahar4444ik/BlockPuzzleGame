@@ -1,8 +1,8 @@
-package sk.tuke.kpi.BlockPuzzle.core;
+package sk.tuke.kpi.BlockPuzzle.game.core;
 
 import lombok.Getter;
-import sk.tuke.kpi.BlockPuzzle.consoleui.ConsoleColor;
-import sk.tuke.kpi.BlockPuzzle.core.blocks.Block;
+import sk.tuke.kpi.BlockPuzzle.game.consoleui.ConsoleColor;
+import sk.tuke.kpi.BlockPuzzle.game.core.blocks.Block;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,9 +25,9 @@ public class Board {
     }
 
     private void initializeBoard() {
-        for (int i = 0; i < this.rows; i++) {
-            for (int j = 0; j < this.cols; j++) {
-                this.grid[i][j] = Cell.createEmptyBoardCell();
+        for (int row = 0; row < this.rows; row++) {
+            for (int col = 0; col < this.cols; col++) {
+                this.grid[row][col] = Cell.createEmptyBoardCell();
             }
         }
     }
@@ -37,14 +37,15 @@ public class Board {
         int width = block.getWidth();
         int height = block.getHeight();
 
-        if (col+width > this.cols || row+height > this.rows){
-            return false; // Block placing goes out of the board
+        if (col + width > this.cols || row + height > this.rows) {
+            return false; // Block is out of board bounds
         }
 
-        for (int i = 0; i < height; i++){ // Check if the block do not interact with another one
-            for (int j = 0; j < width; j++){
-                if (shape[i][j].getSymbol() == CellState.FILLED.getSymbol() && this.grid[row + i][col + j].getSymbol() != CellState.EMPTY_BOARD.getSymbol()){
-                    return false;
+        for (int rowIdx = 0; rowIdx < height; rowIdx++) {
+            for (int colIdx = 0; colIdx < width; colIdx++) {
+                if (shape[rowIdx][colIdx].getSymbol() == CellState.FILLED.getSymbol() &&
+                        this.grid[row + rowIdx][col + colIdx].getSymbol() != CellState.EMPTY_BOARD.getSymbol()) {
+                    return false; // Block is colliding with another block
                 }
             }
         }
@@ -62,12 +63,12 @@ public class Board {
         int width = block.getWidth();
         int height = block.getHeight();
 
-        for (int i = 0; i < height; i++){
-            for (int j = 0; j < width; j++){
-                if (shape[i][j].getSymbol() == CellState.FILLED.getSymbol()){
-                    this.grid[row+i][col+j].setSymbol(CellState.FILLED.getSymbol());
-                    this.grid[row+i][col+j].setColor(color);
-                    blockMap.put(new Position(row + i, col + j), block);
+        for (int rowIdx = 0; rowIdx < height; rowIdx++){
+            for (int colIdx = 0; colIdx < width; colIdx++){
+                if (shape[rowIdx][colIdx].getSymbol() == CellState.FILLED.getSymbol()){
+                    this.grid[row+ rowIdx][col+ colIdx].setSymbol(CellState.FILLED.getSymbol());
+                    this.grid[row+ rowIdx][col+ colIdx].setColor(color);
+                    blockMap.put(new Position(row + rowIdx, col + colIdx), block);
                 }
             }
         }
@@ -94,11 +95,11 @@ public class Board {
 
         Block block = blockMap.get(pos);
 
-        for (int i = 0; i < this.rows; i++) {
-            for (int j = 0; j < this.cols; j++) {
-                if (grid[i][j].getSymbol() == CellState.FILLED.getSymbol() && blockMap.get(new Position(i, j)) == block) {
-                    grid[i][j].setSymbol(CellState.EMPTY_BOARD.getSymbol());
-                    grid[i][j].setColor(ConsoleColor.RESET);
+        for (int rowIdx = 0; rowIdx < this.rows; rowIdx++) {
+            for (int colIdx = 0; colIdx < this.cols; colIdx++) {
+                if (grid[rowIdx][colIdx].getSymbol() == CellState.FILLED.getSymbol() && blockMap.get(new Position(rowIdx, colIdx)) == block) {
+                    grid[rowIdx][colIdx].setSymbol(CellState.EMPTY_BOARD.getSymbol());
+                    grid[rowIdx][colIdx].setColor(ConsoleColor.RESET);
                 }
             }
         }

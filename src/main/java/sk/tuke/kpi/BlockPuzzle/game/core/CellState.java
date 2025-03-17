@@ -1,4 +1,4 @@
-package sk.tuke.kpi.BlockPuzzle.core;
+package sk.tuke.kpi.BlockPuzzle.game.core;
 
 import lombok.Getter;
 

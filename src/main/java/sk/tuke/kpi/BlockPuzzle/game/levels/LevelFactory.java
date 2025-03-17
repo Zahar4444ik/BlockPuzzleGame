@@ -6,7 +6,6 @@ public class LevelFactory {
             case EASY -> new EasyLevel();
             case MEDIUM -> new MediumLevel();
             case HARD -> new HardLevel();
-            case EXPERT -> new EasyLevel();
             default -> null;
         };
     }
