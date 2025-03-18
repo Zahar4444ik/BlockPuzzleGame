@@ -1,13 +1,11 @@
 package sk.tuke.kpi.BlockPuzzle.game.consoleui;
 
-import sk.tuke.kpi.BlockPuzzle.game.core.Board;
-import sk.tuke.kpi.BlockPuzzle.game.core.Cell;
-import sk.tuke.kpi.BlockPuzzle.game.core.Player;
-import sk.tuke.kpi.BlockPuzzle.game.core.blocks.Block;
+import sk.tuke.kpi.BlockPuzzle.game.core.board.Board;
+import sk.tuke.kpi.BlockPuzzle.game.core.board.Cell;
+import sk.tuke.kpi.BlockPuzzle.game.core.board.Block;
 import sk.tuke.kpi.BlockPuzzle.game.levels.GameLevels;
 import sk.tuke.kpi.BlockPuzzle.gamestudio.entity.Comment;
 import sk.tuke.kpi.BlockPuzzle.gamestudio.entity.Score;
-import sk.tuke.kpi.BlockPuzzle.gamestudio.service.ScoreServiceJDBC;
 
 import java.util.List;
 
@@ -171,15 +169,15 @@ public class GamePrinter {
     }
 
     public static void successfullyPlaced(){
-        System.out.println("✅ Block placed successfully!");
+        System.out.println("\n✅ Block placed successfully!");
     }
 
     public static void successfullyRemoved(){
-        System.out.println("✅ Block removed successfully!");
+        System.out.println("\n✅ Block removed successfully!");
     }
 
     public static void noBlockFound(){
-        System.out.println("❌ No block found at that location!");
+        System.out.println("\n❌ No block found at that location!");
     }
 
     public static void askForNextMove(){
@@ -230,5 +228,13 @@ public class GamePrinter {
 
     public static void thankYouForFeedback(){
         System.out.println("Thank you for your feedback!");
+    }
+
+    public static void greetNewPlayer(String nickname){
+        System.out.println("Welcome, " + nickname + "!");
+    }
+
+    public static void playerAlreadyExists(String nickname, int score){
+        System.out.println("Welcome back, " + nickname + "!" + ConsoleColor.PURPLE + " Your previous score: " + score + ConsoleColor.RESET);
     }
 }

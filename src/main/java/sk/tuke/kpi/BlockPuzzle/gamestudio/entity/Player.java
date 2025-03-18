@@ -1,10 +1,7 @@
-package sk.tuke.kpi.BlockPuzzle.game.core;
+package sk.tuke.kpi.BlockPuzzle.gamestudio.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import sk.tuke.kpi.BlockPuzzle.gamestudio.entity.Comment;
-import sk.tuke.kpi.BlockPuzzle.gamestudio.entity.Rating;
-import sk.tuke.kpi.BlockPuzzle.gamestudio.entity.Score;
 import sk.tuke.kpi.BlockPuzzle.gamestudio.service.*;
 
 import java.util.Date;
@@ -14,10 +11,18 @@ import java.util.Date;
 public class Player {
     private final String nickname;
     private int score;
+    private int gamesPlayed;
+    private Date lastPlayed;
 
     public Player(String nickname){
         this.nickname = nickname;
         this.score = 0;
+        this.gamesPlayed = 0;
+        this.lastPlayed = new Date();
+    }
+
+    public void increaseGamesPlayed(){
+        this.gamesPlayed++;
     }
 
     public void increaseScore(int score){

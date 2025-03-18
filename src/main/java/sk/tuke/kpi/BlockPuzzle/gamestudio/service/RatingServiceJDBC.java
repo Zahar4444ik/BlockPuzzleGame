@@ -10,15 +10,16 @@ public class RatingServiceJDBC implements RatingService{
     public static final String USER = "postgres";
     public static final String PASSWORD = "Zahar19%03";
 
-    private static final String INSERT = "INSERT INTO rating (game, player, rating, rated_on) VALUES (?, ?, ?, ?)";
-    private static final String SELECT = "SELECT rating FROM rating WHERE game = ? AND player = ?";
-    private static final String DELETE = "DELETE FROM rating";
+    public static final String INSERT = "INSERT INTO rating (game, player, rating, rated_on) VALUES (?, ?, ?, ?)";
+    public static final String SELECT = "SELECT rating FROM rating WHERE game = ? AND player = ?";
+    public static final String DELETE = "DELETE FROM rating";
 
-    private static final String SELECT_AVERAGE = "SELECT AVG(rating) FROM rating WHERE game = ?";
+    public static final String SELECT_AVERAGE = "SELECT AVG(rating) FROM rating WHERE game = ?";
+    public static final String PLAYER_EXISTS = "SELECT 1 FROM rating WHERE player = ?";
 
     @Override
     public void setRating(Rating rating) throws RatingException {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(INSERT)
         ) {
             if (playerExists(connection, rating.getPlayer())) {
@@ -34,7 +35,7 @@ public class RatingServiceJDBC implements RatingService{
 
     @Override
     public int getAverageRating(String game) throws RatingException {
-        try (Connection connection = DriverManager.getConnection(ScoreServiceJDBC.URL, ScoreServiceJDBC.USER, ScoreServiceJDBC.PASSWORD);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_AVERAGE)
         ) {
             statement.setString(1, game);
@@ -51,7 +52,7 @@ public class RatingServiceJDBC implements RatingService{
 
     @Override
     public int getRating(String game, String player) throws RatingException {
-        try (Connection connection = DriverManager.getConnection(ScoreServiceJDBC.URL, ScoreServiceJDBC.USER, ScoreServiceJDBC.PASSWORD);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT)
         ) {
             statement.setString(1, game);
@@ -69,7 +70,7 @@ public class RatingServiceJDBC implements RatingService{
 
     @Override
     public void reset() throws RatingException {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        try (Connection connection = getConnection();
              Statement statement = connection.createStatement()
         ) {
             statement.executeUpdate(DELETE);
@@ -79,7 +80,6 @@ public class RatingServiceJDBC implements RatingService{
     }
 
     private boolean playerExists(Connection connection, String player) throws SQLException {
-        final String PLAYER_EXISTS = "SELECT 1 FROM rating WHERE player = ?";
         try (PreparedStatement statement = connection.prepareStatement(PLAYER_EXISTS)) {
             statement.setString(1, player);
             try (ResultSet rs = statement.executeQuery()) {
@@ -107,5 +107,9 @@ public class RatingServiceJDBC implements RatingService{
         } catch (SQLException e) {
             throw new ScoreException("Problem updating score of existing player", e);
         }
+    }
+
+    protected Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 }

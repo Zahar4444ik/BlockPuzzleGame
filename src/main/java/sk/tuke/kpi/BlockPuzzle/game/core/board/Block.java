@@ -1,8 +1,7 @@
-package sk.tuke.kpi.BlockPuzzle.game.core.blocks;
+package sk.tuke.kpi.BlockPuzzle.game.core.board;
 
 import lombok.Getter;
 import sk.tuke.kpi.BlockPuzzle.game.consoleui.ConsoleColor;
-import sk.tuke.kpi.BlockPuzzle.game.core.Cell;
 
 @Getter
 public class Block {

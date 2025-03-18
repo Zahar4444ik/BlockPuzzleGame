@@ -1,8 +1,8 @@
-package sk.tuke.kpi.BlockPuzzle.game.core;
+package sk.tuke.kpi.BlockPuzzle.game.core.board;
 
 import lombok.Getter;
 import sk.tuke.kpi.BlockPuzzle.game.consoleui.ConsoleColor;
-import sk.tuke.kpi.BlockPuzzle.game.core.blocks.Block;
+import sk.tuke.kpi.BlockPuzzle.game.core.Position;
 
 import java.util.HashMap;
 import java.util.Map;

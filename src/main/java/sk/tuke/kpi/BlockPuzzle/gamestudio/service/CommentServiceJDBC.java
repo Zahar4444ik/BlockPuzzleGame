@@ -11,9 +11,9 @@ public class CommentServiceJDBC  implements CommentService{
     public static final String USER = "postgres";
     public static final String PASSWORD = "Zahar19%03";
 
-    private static final String INSERT = "INSERT INTO comment (game, player, comment, commented_on) VALUES (?, ?, ?, ?)";
-    private static final String SELECT = "SELECT game, player, comment, commented_on FROM comment WHERE game = ? ORDER BY commented_on DESC LIMIT 10";
-    private static final String DELETE = "DELETE FROM comment";
+    public static final String INSERT = "INSERT INTO comment (game, player, comment, commented_on) VALUES (?, ?, ?, ?)";
+    public static final String SELECT = "SELECT game, player, comment, commented_on FROM comment WHERE game = ? ORDER BY commented_on DESC LIMIT 10";
+    public static final String DELETE = "DELETE FROM comment";
 
     @Override
     public void addComment(Comment comment) {
@@ -21,7 +21,7 @@ public class CommentServiceJDBC  implements CommentService{
             throw new CommentException("Invalid comment");
         }
 
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(INSERT)
         ) {
             statement.setString(1, comment.getGame());
@@ -36,7 +36,7 @@ public class CommentServiceJDBC  implements CommentService{
 
     @Override
     public List<Comment> getComments(String game) {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT)
         ) {
             statement.setString(1, game);
@@ -54,7 +54,7 @@ public class CommentServiceJDBC  implements CommentService{
 
     @Override
     public void reset() {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        try (Connection connection = getConnection();
              Statement statement = connection.createStatement()
         ) {
             statement.executeUpdate(DELETE);
@@ -65,5 +65,9 @@ public class CommentServiceJDBC  implements CommentService{
 
     private boolean isCommentValid(Comment comment) {
         return comment != null && comment.getPlayer() != null && comment.getGame() != null && comment.getComment() != null;
+    }
+
+    protected Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 }

@@ -1,28 +1,27 @@
 package sk.tuke.kpi.BlockPuzzle.game.consoleui;
 
-import sk.tuke.kpi.BlockPuzzle.game.core.Board;
-import sk.tuke.kpi.BlockPuzzle.game.core.Player;
+import sk.tuke.kpi.BlockPuzzle.game.consoleui.inputHandler.InputHandler;
+import sk.tuke.kpi.BlockPuzzle.game.core.board.Board;
+import sk.tuke.kpi.BlockPuzzle.gamestudio.entity.Player;
 import sk.tuke.kpi.BlockPuzzle.game.core.Position;
-import sk.tuke.kpi.BlockPuzzle.game.core.blocks.Block;
-import sk.tuke.kpi.BlockPuzzle.game.GameState;
-import sk.tuke.kpi.BlockPuzzle.game.Move;
+import sk.tuke.kpi.BlockPuzzle.game.core.board.Block;
+import sk.tuke.kpi.BlockPuzzle.game.consoleui.inputHandler.GameState;
+import sk.tuke.kpi.BlockPuzzle.game.consoleui.inputHandler.Move;
 import sk.tuke.kpi.BlockPuzzle.game.levels.GameLevels;
 import sk.tuke.kpi.BlockPuzzle.game.levels.Level;
 import sk.tuke.kpi.BlockPuzzle.game.levels.LevelFactory;
-import sk.tuke.kpi.BlockPuzzle.gamestudio.entity.Score;
-import sk.tuke.kpi.BlockPuzzle.gamestudio.service.CommentServiceJDBC;
-import sk.tuke.kpi.BlockPuzzle.gamestudio.service.RatingServiceJDBC;
-import sk.tuke.kpi.BlockPuzzle.gamestudio.service.ScoreServiceJDBC;
+import sk.tuke.kpi.BlockPuzzle.gamestudio.service.*;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 public class BlockPuzzleConsole {
-    private final static String GAME_NAME = "Block Puzzle";
+    public final static String GAME_NAME = "Block Puzzle";
     private GameState gameState;
     private final InputHandler inputHandler;
     private Player player;
+    private final PlayerService playerService = new PlayerServiceJDBC();
 
     public BlockPuzzleConsole() {
         this.inputHandler = new InputHandler();
@@ -36,7 +35,8 @@ public class BlockPuzzleConsole {
         GamePrinter.printAverageRating(new RatingServiceJDBC().getAverageRating(GAME_NAME));
         GamePrinter.printComments(new CommentServiceJDBC().getComments(GAME_NAME));
 
-        this.player = createPlayer();
+        loginPlayer();
+        playerService.updatePlayer(player);
 
         while(!this.isExit()){
 
@@ -58,11 +58,13 @@ public class BlockPuzzleConsole {
         this.getFeedback();
         GamePrinter.goodbye();
 
+        this.playerService.updatePlayer(this.player);
     }
 
     private void runGame(Board board, List<Block> blocks) {
 
         this.gameState = GameState.PLAYING;
+        this.player.increaseGamesPlayed();
         Move move = Move.NONE;
 
         while (!board.isFull() && move != Move.GIVEN_UP) {
@@ -86,6 +88,7 @@ public class BlockPuzzleConsole {
             this.player.increaseScore(100);
             GamePrinter.printBoard(board);
             GamePrinter.levelWin();
+            GamePrinter.printScore(this.player.getScore());
         }
         this.player.saveScore(GAME_NAME);
         this.gameState = GameState.MENU;
@@ -121,9 +124,19 @@ public class BlockPuzzleConsole {
         }
     }
 
-    private Player createPlayer() {
+    private void loginPlayer() {
+
         String nickname = this.inputHandler.enterPlayerNickname();
-        return new Player(nickname);
+        if (playerService.playerExists(nickname)) {
+            this.player = playerService.getPlayer(nickname);
+            GamePrinter.playerAlreadyExists(player.getNickname(), player.getScore());
+        } else {
+            playerService.registerPlayer(nickname);
+            this.player = playerService.getPlayer(nickname);
+            GamePrinter.greetNewPlayer(player.getNickname());
+        }
+
+        player.setLastPlayed(new Date());
     }
 
     private void getFeedback() {

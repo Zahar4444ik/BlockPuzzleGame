@@ -1,9 +1,9 @@
-package sk.tuke.kpi.BlockPuzzle.game.consoleui;
+package sk.tuke.kpi.BlockPuzzle.game.consoleui.inputHandler;
 
-import sk.tuke.kpi.BlockPuzzle.game.core.Board;
+import sk.tuke.kpi.BlockPuzzle.game.consoleui.GamePrinter;
+import sk.tuke.kpi.BlockPuzzle.game.core.board.Board;
 import sk.tuke.kpi.BlockPuzzle.game.core.Position;
-import sk.tuke.kpi.BlockPuzzle.game.core.blocks.Block;
-import sk.tuke.kpi.BlockPuzzle.game.Move;
+import sk.tuke.kpi.BlockPuzzle.game.core.board.Block;
 import sk.tuke.kpi.BlockPuzzle.game.levels.GameLevels;
 
 import java.util.List;

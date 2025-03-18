@@ -23,7 +23,7 @@ public class ScoreServiceJDBC implements ScoreService {
             throw new ScoreException("Invalid score");
         }
 
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(INSERT)
         ) {
             if (!playerExists(connection, score.getPlayer())) {
@@ -38,7 +38,7 @@ public class ScoreServiceJDBC implements ScoreService {
 
     @Override
     public List<Score> getTopScores(String game) {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT);
         ) {
             statement.setString(1, game);
@@ -56,7 +56,7 @@ public class ScoreServiceJDBC implements ScoreService {
 
     @Override
     public void reset() {
-        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
         ) {
             statement.executeUpdate(DELETE);
@@ -65,7 +65,7 @@ public class ScoreServiceJDBC implements ScoreService {
         }
     }
 
-    private boolean playerExists(Connection connection, String player) throws SQLException {
+    public boolean playerExists(Connection connection, String player) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(PLAYER_EXISTS)) {
             statement.setString(1, player);
             try (ResultSet rs = statement.executeQuery()) {
@@ -93,4 +93,8 @@ public class ScoreServiceJDBC implements ScoreService {
             throw new ScoreException("Problem updating score of existing player", e);
         }
     }
+
+    protected Connection getConnection()  throws SQLException{
+        return DriverManager.getConnection(URL, USER, PASSWORD);
+    };
 }

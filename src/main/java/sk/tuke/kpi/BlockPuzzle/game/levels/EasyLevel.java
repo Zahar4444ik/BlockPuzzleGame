@@ -1,9 +1,9 @@
 package sk.tuke.kpi.BlockPuzzle.game.levels;
 
 import sk.tuke.kpi.BlockPuzzle.game.consoleui.ConsoleColor;
-import sk.tuke.kpi.BlockPuzzle.game.core.Cell;
-import sk.tuke.kpi.BlockPuzzle.game.core.blocks.Block;
-import sk.tuke.kpi.BlockPuzzle.game.core.Board;
+import sk.tuke.kpi.BlockPuzzle.game.core.board.Cell;
+import sk.tuke.kpi.BlockPuzzle.game.core.board.Block;
+import sk.tuke.kpi.BlockPuzzle.game.core.board.Board;
 
 import java.util.ArrayList;
 import java.util.List;
