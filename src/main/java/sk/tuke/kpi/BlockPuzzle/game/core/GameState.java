@@ -1,4 +1,4 @@
-package sk.tuke.kpi.BlockPuzzle.game.consoleui.inputHandler;
+package sk.tuke.kpi.BlockPuzzle.game.core;
 
 public enum GameState {
     MENU,

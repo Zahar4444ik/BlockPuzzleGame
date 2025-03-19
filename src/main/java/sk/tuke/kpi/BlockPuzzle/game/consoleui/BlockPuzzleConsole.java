@@ -5,7 +5,7 @@ import sk.tuke.kpi.BlockPuzzle.game.core.board.Board;
 import sk.tuke.kpi.BlockPuzzle.gamestudio.entity.Player;
 import sk.tuke.kpi.BlockPuzzle.game.core.Position;
 import sk.tuke.kpi.BlockPuzzle.game.core.board.Block;
-import sk.tuke.kpi.BlockPuzzle.game.consoleui.inputHandler.GameState;
+import sk.tuke.kpi.BlockPuzzle.game.core.GameState;
 import sk.tuke.kpi.BlockPuzzle.game.consoleui.inputHandler.Move;
 import sk.tuke.kpi.BlockPuzzle.game.levels.GameLevels;
 import sk.tuke.kpi.BlockPuzzle.game.levels.Level;

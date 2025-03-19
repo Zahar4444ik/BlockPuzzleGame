@@ -218,11 +218,11 @@ public class GamePrinter {
 
     public static void printComments(List<Comment> comments) {
         System.out.println(ConsoleColor.PURPLE + "Comments:" + ConsoleColor.RESET);
-        for (int i = 0; i < comments.size(); i++) {
-            if (i == 5) {
+        for (int commentIdx = 0; commentIdx < comments.size(); commentIdx++) {
+            if (commentIdx == 5) {
                 break;
             }
-            var comment = comments.get(i);
+            var comment = comments.get(commentIdx);
             System.out.println(ConsoleColor.BLUE + comment.getPlayer() + ": " + ConsoleColor.RESET + comment.getComment());
         }
         System.out.println();
