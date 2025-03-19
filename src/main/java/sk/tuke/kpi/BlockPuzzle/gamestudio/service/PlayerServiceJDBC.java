@@ -10,7 +10,7 @@ public class PlayerServiceJDBC implements PlayerService{
     public static final String USER = "postgres";
     public static final String PASSWORD = "Zahar19%03";
 
-    public static final String INSERT_PLAYER = "INSERT INTO player (nickname, gamesPlayed, lastPlayed, score_id) VALUES (?, 0, 0, ?)";
+    public static final String INSERT_PLAYER = "INSERT INTO player (nickname, score, gamesPlayed, lastPlayed) VALUES (?, 0, 0, ?)";
     public static final String SELECT_PLAYER = "SELECT * FROM player WHERE nickname = ?";
     public static final String UPDATE_PLAYER = "UPDATE player SET score = ?, gamesPlayed = ?, lastPlayed = ? WHERE nickname = ?";
     public static final String DELETE_PLAYERS = "DELETE FROM player";

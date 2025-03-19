@@ -85,8 +85,6 @@ public class InputHandler {
                 return 'y';
             } else if (input.equals("n") || input.equals("no")) {
                 return 'n';
-            } else {
-                GamePrinter.invalidInput();
             }
         } while (!input.equals("y") && !input.equals("yes") && !input.equals("n") && !input.equals("no"));
 

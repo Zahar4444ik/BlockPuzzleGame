@@ -54,18 +54,20 @@ public class GamePrinter {
 
     public static void displayGameLevels(){
         System.out.println();
-        String[] emoji = {ConsoleColor.GREEN + "\uD83D\uDFE2" + ConsoleColor.RESET, "\uD83D\uDD35", "\uD83D\uDD34","\uD83C\uDFB2", "❌",};
+//        String[] emoji = {ConsoleColor.GREEN + "\uD83D\uDFE2" + ConsoleColor.RESET, "\uD83D\uDD35", "\uD83D\uDD34","\uD83C\uDFB2", "❌",};
+        String[] emoji = {ConsoleColor.GREEN + "\uD83D\uDFE2" + ConsoleColor.RESET, "\uD83D\uDD35", "\uD83D\uDD34", "❌",};
         int emojiIndex = 0;
 
         for (GameLevels level: GameLevels.values()){
-            String size =(level != GameLevels.EXIT && level != GameLevels.RANDOM) ? " (" + level.getRows() + "x" + level.getCols() + ")" : "";
+//            String size =(level != GameLevels.EXIT && level != GameLevels.RANDOM) ? " (" + level.getRows() + "x" + level.getCols() + ")" : "";
+            String size =(level != GameLevels.EXIT) ? " (" + level.getRows() + "x" + level.getCols() + ")" : "";
             System.out.println(emoji[emojiIndex++] + level.name() + " - " + level.getDescription() + size);
         }
         System.out.println();
     }
 
     public static void askForLevel(){
-        System.out.print(ConsoleColor.BOLD + ConsoleColor.UNDERLINE.toString() + "Enter level (EASY, MEDIUM, HARD, EXPERT):" + ConsoleColor.RESET + " ");
+        System.out.print(ConsoleColor.BOLD + ConsoleColor.UNDERLINE.toString() + "Enter level (EASY, MEDIUM, HARD):" + ConsoleColor.RESET + " ");
     }
 
     public static void invalidInput(){
@@ -207,7 +209,7 @@ public class GamePrinter {
     }
 
     public static void enterRating(){
-        System.out.println(ConsoleColor.BOLD + "Enter your rate (1-5):" + ConsoleColor.RESET + " ");
+        System.out.println(ConsoleColor.BOLD + "Enter your rate (1-5): " + ConsoleColor.RESET);
     }
 
     public static void printAverageRating(int averageRating) {

@@ -7,7 +7,7 @@ public enum GameLevels {
     EASY(5, 5, "Beginner-friendly, small board."),
     MEDIUM(7, 7, "More challenging, larger board."),
     HARD(10, 10, "Big board, requires strategy."),
-    RANDOM(0,0, "Random board size, good luck!"),
+//    RANDOM(0,0, "Random board size, good luck!"),
     EXIT(-1, -1, "Type 'exit' to leave");
 
 

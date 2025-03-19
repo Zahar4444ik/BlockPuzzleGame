@@ -37,9 +37,9 @@ public class HardLevel implements Level{
         }, ConsoleColor.PURPLE));
 
         blocks.add(new Block(new Cell[][]{
-            {new Cell(ConsoleColor.RED), Cell.createEmptyBlockCell(), Cell.createEmptyBlockCell(), Cell.createEmptyBlockCell()},             // #
-            {new Cell(ConsoleColor.RED), new Cell(ConsoleColor.RED), new Cell(ConsoleColor.RED), new Cell(ConsoleColor.RED)}, // ####
-        }, ConsoleColor.RED));
+            {new Cell(ConsoleColor.WHITE), Cell.createEmptyBlockCell(), Cell.createEmptyBlockCell(), Cell.createEmptyBlockCell()},             // #
+            {new Cell(ConsoleColor.WHITE), new Cell(ConsoleColor.WHITE), new Cell(ConsoleColor.WHITE), new Cell(ConsoleColor.WHITE)}, // ####
+        }, ConsoleColor.WHITE));
 
         blocks.add(new Block(new Cell[][]{
             {new Cell(ConsoleColor.BLUE), new Cell(ConsoleColor.BLUE), new Cell(ConsoleColor.BLUE), new Cell(ConsoleColor.BLUE)}, // ####
@@ -85,6 +85,32 @@ public class HardLevel implements Level{
                 {new Cell(ConsoleColor.YELLOW), new Cell(ConsoleColor.YELLOW)}, // ##
         }, ConsoleColor.YELLOW));
 
+        blocks.add(new Block( new Cell[][]{
+                {new Cell(ConsoleColor.RED), new Cell(ConsoleColor.RED)}, // ##
+                {new Cell(ConsoleColor.RED), new Cell(ConsoleColor.RED)}, // ##
+                {new Cell(ConsoleColor.RED), new Cell(ConsoleColor.RED)}, // ##
+        }, ConsoleColor.RED));
+
+        blocks.add(new Block( new Cell[][]{
+                {Cell.createEmptyBlockCell(), new Cell(ConsoleColor.YELLOW), new Cell(ConsoleColor.YELLOW)}, //   ##
+                {new Cell(ConsoleColor.YELLOW),new Cell(ConsoleColor.YELLOW), new Cell(ConsoleColor.YELLOW)}, // ###
+        }, ConsoleColor.YELLOW));
+
+        blocks.add(new Block( new Cell[][]{
+                {new Cell(ConsoleColor.BLACK), new Cell(ConsoleColor.BLACK)}, // ##
+                {new Cell(ConsoleColor.BLACK), new Cell(ConsoleColor.BLACK)}, // ##
+                {new Cell(ConsoleColor.BLACK), new Cell(ConsoleColor.BLACK)}, // ##
+        }, ConsoleColor.BLACK));
+
+        blocks.add(new Block( new Cell[][]{
+                {new Cell(ConsoleColor.PURPLE), new Cell(ConsoleColor.PURPLE), new Cell(ConsoleColor.PURPLE)}, // ###
+                {new Cell(ConsoleColor.PURPLE), Cell.createEmptyBlockCell(), Cell.createEmptyBlockCell()},   // #
+                {new Cell(ConsoleColor.PURPLE), Cell.createEmptyBlockCell(), Cell.createEmptyBlockCell()},   // #
+                {new Cell(ConsoleColor.PURPLE), Cell.createEmptyBlockCell(), Cell.createEmptyBlockCell()},   // #
+        }, ConsoleColor.PURPLE));
+
         return blocks;
     }
+    
+
 }
