@@ -2,11 +2,11 @@ package com.example.BlockPuzzle;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import sk.tuke.kpi.BlockPuzzle.game.consoleui.ConsoleColor;
-import sk.tuke.kpi.BlockPuzzle.game.core.board.Board;
-import sk.tuke.kpi.BlockPuzzle.game.core.board.Cell;
-import sk.tuke.kpi.BlockPuzzle.game.core.board.CellState;
-import sk.tuke.kpi.BlockPuzzle.game.core.board.Block;
+import sk.tuke.gamestudio.game.BlockPuzzle.consoleui.ConsoleColor;
+import sk.tuke.gamestudio.game.BlockPuzzle.core.board.Board;
+import sk.tuke.gamestudio.game.BlockPuzzle.core.board.Cell;
+import sk.tuke.gamestudio.game.BlockPuzzle.core.board.CellState;
+import sk.tuke.gamestudio.game.BlockPuzzle.core.board.Block;
 
 import static org.junit.jupiter.api.Assertions.*;
 

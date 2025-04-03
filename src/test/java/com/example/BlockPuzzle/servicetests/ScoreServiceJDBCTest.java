@@ -2,9 +2,9 @@ package com.example.BlockPuzzle.servicetests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import sk.tuke.kpi.BlockPuzzle.gamestudio.entity.Score;
-import sk.tuke.kpi.BlockPuzzle.gamestudio.service.ScoreException;
-import sk.tuke.kpi.BlockPuzzle.gamestudio.service.ScoreServiceJDBC;
+import sk.tuke.gamestudio.entity.Score;
+import sk.tuke.gamestudio.service.jdbc.ScoreException;
+import sk.tuke.gamestudio.service.jdbc.ScoreServiceJDBC;
 
 import java.sql.*;
 import java.util.Date;
@@ -37,7 +37,7 @@ public class ScoreServiceJDBCTest {
     }
 
     @Test
-    void TestAddScore() throws SQLException{
+    void TestAddAndSetScore() throws SQLException{
         final Score score = new Score("Player1", "TestGame", 100, new Date());
 
         final PreparedStatement mockStatement_temp = mock(PreparedStatement.class);
@@ -49,7 +49,7 @@ public class ScoreServiceJDBCTest {
         when(mockConnection.prepareStatement(ScoreServiceJDBC.INSERT)).thenReturn(mockStatement);
         when(mockStatement.executeUpdate()).thenReturn(1);
 
-        scoreService.addScore(score);
+        scoreService.addAndSetScore(score);
 
         verify(mockConnection).prepareStatement(ScoreServiceJDBC.PLAYER_EXISTS);
         verify(mockStatement_temp).setString(eq(1), eq("TestGame"));
@@ -64,10 +64,10 @@ public class ScoreServiceJDBCTest {
     }
 
     @Test
-    void TestAddScoreInvalid() {
+    void TestAddAndSetScoreInvalid() {
         Score score = new Score("TestGame", null, 0, null);
 
-        assertThrows(ScoreException.class, () -> scoreService.addScore(score), "Invalid score");
+        assertThrows(ScoreException.class, () -> scoreService.addAndSetScore(score), "Invalid score");
     }
 
     @Test

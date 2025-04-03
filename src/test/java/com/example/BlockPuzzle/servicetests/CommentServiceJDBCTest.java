@@ -2,9 +2,9 @@ package com.example.BlockPuzzle.servicetests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import sk.tuke.kpi.BlockPuzzle.gamestudio.entity.Comment;
-import sk.tuke.kpi.BlockPuzzle.gamestudio.service.CommentServiceJDBC;
-import sk.tuke.kpi.BlockPuzzle.gamestudio.service.CommentException;
+import sk.tuke.gamestudio.entity.Comment;
+import sk.tuke.gamestudio.service.jdbc.CommentServiceJDBC;
+import sk.tuke.gamestudio.service.jdbc.CommentException;
 
 import java.sql.*;
 import java.util.List;
@@ -43,7 +43,7 @@ public class CommentServiceJDBCTest {
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockStatement);
         when(mockStatement.executeUpdate()).thenReturn(1);
 
-        commentService.addComment(comment);
+        commentService.addAndSetComment(comment);
 
         verify(mockStatement, times(1)).setString(eq(1), eq("TestGame"));
         verify(mockStatement, times(1)).setString(eq(2), eq("Player1"));
@@ -56,7 +56,7 @@ public class CommentServiceJDBCTest {
     void testAddCommentInvalidComment() {
         Comment comment = new Comment("TestGame", "Player1", null, new java.util.Date());
 
-        assertThrows(CommentException.class, () -> commentService.addComment(comment));
+        assertThrows(CommentException.class, () -> commentService.addAndSetComment(comment));
     }
 
     @Test
@@ -103,6 +103,6 @@ public class CommentServiceJDBCTest {
 
         when(mockConnection.prepareStatement(anyString())).thenThrow(new SQLException("Database error"));
 
-        assertThrows(CommentException.class, () -> commentService.addComment(comment));
+        assertThrows(CommentException.class, () -> commentService.addAndSetComment(comment));
     }
 }

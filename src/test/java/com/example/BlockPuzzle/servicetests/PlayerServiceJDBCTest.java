@@ -2,8 +2,8 @@ package com.example.BlockPuzzle.servicetests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import sk.tuke.kpi.BlockPuzzle.gamestudio.entity.Player;
-import sk.tuke.kpi.BlockPuzzle.gamestudio.service.PlayerServiceJDBC;
+import sk.tuke.gamestudio.entity.Player;
+import sk.tuke.gamestudio.service.jdbc.PlayerServiceJDBC;
 
 import java.sql.*;
 
