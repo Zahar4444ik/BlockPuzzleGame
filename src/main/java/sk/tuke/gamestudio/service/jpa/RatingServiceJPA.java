@@ -6,8 +6,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import sk.tuke.gamestudio.entity.Rating;
-import sk.tuke.gamestudio.service.jdbc.RatingException;
-import sk.tuke.gamestudio.service.jdbc.RatingService;
+import sk.tuke.gamestudio.service.exceptions.RatingException;
+import sk.tuke.gamestudio.service.RatingService;
 
 @Service
 @Transactional
@@ -22,14 +22,15 @@ public class RatingServiceJPA implements RatingService {
             throw new RatingException("Invalid rating");
         }
 
-        final var previousPlayerRating = this.entityManager.createNamedQuery("Rating.getExistingPlayerRating", Rating.class)
-                .setParameter("game", rating.getGame()).setParameter("player", rating.getPlayer().getNickname()).getSingleResult();
+        try {
+            Rating previousPlayerRating = this.entityManager.createNamedQuery("Rating.getExistingPlayerRating", Rating.class)
+                    .setParameter("game", rating.getGame()).setParameter("player", rating.getPlayer()).getSingleResult();
 
-        if (previousPlayerRating != null) {
             this.entityManager.createNamedQuery("Rating.updateExistingPlayerRating")
                     .setParameter("rating", rating.getRating()).setParameter("ratedOn", rating.getRatedOn())
-                    .setParameter("player", rating.getPlayer().getNickname()).setParameter("game", rating.getGame()).executeUpdate();
-        } else {
+                    .setParameter("player", rating.getPlayer()).setParameter("game", rating.getGame()).executeUpdate();
+        }
+        catch (NoResultException e) {
             this.entityManager.persist(rating);
         }
     }

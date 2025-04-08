@@ -1,7 +1,8 @@
 package sk.tuke.gamestudio.service.jdbc;
 
-import sk.tuke.gamestudio.entity.Player;
 import sk.tuke.gamestudio.entity.Score;
+import sk.tuke.gamestudio.service.ScoreService;
+import sk.tuke.gamestudio.service.exceptions.ScoreException;
 
 import java.sql.*;
 import java.util.ArrayList;

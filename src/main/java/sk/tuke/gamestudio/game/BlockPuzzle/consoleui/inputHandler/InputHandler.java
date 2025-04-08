@@ -115,12 +115,8 @@ public class InputHandler {
         return input;
     }
 
-    public String getRating() {
-        String input;
-        do {
-            GamePrinter.enterRating();
-            input = scanner.nextLine().trim();
-        } while (input.isBlank());
-        return input;
+    public int getRating() {
+        GamePrinter.enterRating();
+        return getIntInput(0, 5);
     }
 }

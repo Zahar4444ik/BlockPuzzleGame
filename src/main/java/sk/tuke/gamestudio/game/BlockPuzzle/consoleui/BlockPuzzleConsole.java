@@ -1,5 +1,10 @@
 package sk.tuke.gamestudio.game.BlockPuzzle.consoleui;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import sk.tuke.gamestudio.entity.Comment;
+import sk.tuke.gamestudio.entity.Rating;
+import sk.tuke.gamestudio.entity.Score;
 import sk.tuke.gamestudio.game.BlockPuzzle.consoleui.inputHandler.AuthAction;
 import sk.tuke.gamestudio.game.BlockPuzzle.consoleui.inputHandler.InputHandler;
 import sk.tuke.gamestudio.game.BlockPuzzle.core.board.Board;
@@ -11,18 +16,39 @@ import sk.tuke.gamestudio.game.BlockPuzzle.consoleui.inputHandler.Move;
 import sk.tuke.gamestudio.game.BlockPuzzle.levels.GameLevels;
 import sk.tuke.gamestudio.game.BlockPuzzle.levels.Level;
 import sk.tuke.gamestudio.game.BlockPuzzle.levels.LevelFactory;
-import sk.tuke.gamestudio.service.jdbc.*;
+import sk.tuke.gamestudio.service.CommentService;
+import sk.tuke.gamestudio.service.PlayerService;
+import sk.tuke.gamestudio.service.RatingService;
+import sk.tuke.gamestudio.service.ScoreService;
+import sk.tuke.gamestudio.service.jdbc.CommentServiceJDBC;
+import sk.tuke.gamestudio.service.jdbc.PlayerServiceJDBC;
+import sk.tuke.gamestudio.service.jdbc.RatingServiceJDBC;
+import sk.tuke.gamestudio.service.jdbc.ScoreServiceJDBC;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+@Component
 public class BlockPuzzleConsole {
     public final static String GAME_NAME = "Block Puzzle";
     private GameState gameState;
     private final InputHandler inputHandler;
     private Player player;
-    private final PlayerService playerService = new PlayerServiceJDBC();
+
+//    private PlayerService playerService = new PlayerServiceJDBC();
+//    private ScoreService scoreService = new ScoreServiceJDBC();
+//    private RatingService ratingService = new RatingServiceJDBC();
+//    private CommentService commentService = new CommentServiceJDBC();
+
+    @Autowired
+    private PlayerService playerService = new PlayerServiceJDBC();
+    @Autowired
+    private ScoreService scoreService = new ScoreServiceJDBC();
+    @Autowired
+    private RatingService ratingService = new RatingServiceJDBC();
+    @Autowired
+    private CommentService commentService = new CommentServiceJDBC();
 
     public BlockPuzzleConsole() {
         this.inputHandler = new InputHandler();
@@ -32,9 +58,9 @@ public class BlockPuzzleConsole {
 
     public void start() {
         GamePrinter.welcome();
-        GamePrinter.leaderboard(new ScoreServiceJDBC().getTopScores(GAME_NAME));
-        GamePrinter.printAverageRating(new RatingServiceJDBC().getAverageRating(GAME_NAME));
-        GamePrinter.printComments(new CommentServiceJDBC().getComments(GAME_NAME));
+        GamePrinter.leaderboard(this.scoreService.getTopScores(GAME_NAME));
+        GamePrinter.printAverageRating(this.ratingService.getAverageRating(GAME_NAME));
+        GamePrinter.printComments(this.commentService.getComments(GAME_NAME));
 
         handleAuth();
         playerService.updatePlayer(player);
@@ -59,6 +85,7 @@ public class BlockPuzzleConsole {
         this.getFeedback();
         GamePrinter.goodbye();
 
+        this.scoreService.addAndSetScore(new Score(GAME_NAME, this.player, this.player.getScore(), new Date()));
         this.playerService.updatePlayer(this.player);
     }
 
@@ -91,7 +118,7 @@ public class BlockPuzzleConsole {
             GamePrinter.levelWin();
             GamePrinter.printScore(this.player.getScore());
         }
-        this.player.saveScore(GAME_NAME);
+
         this.gameState = GameState.MENU;
     }
 
@@ -161,15 +188,15 @@ public class BlockPuzzleConsole {
     private void getFeedback() {
         GamePrinter.askForRating();
         if (this.inputHandler.getYesNoAnswer()) {
-            String rating = this.inputHandler.getRating();
-            this.player.setRating(GAME_NAME, rating);
+            int rating = this.inputHandler.getRating();
+            this.ratingService.setAndAddRating(new Rating(GAME_NAME, this.player, rating, new Date()));
         }
 
         GamePrinter.askForComment();
         if (this.inputHandler.getYesNoAnswer()) {
 
-            String comment = this.inputHandler.getComment();
-            this.player.addComment(GAME_NAME, comment);
+            String commentMsg = this.inputHandler.getComment();
+            this.commentService.addComment(new Comment(GAME_NAME, this.player, commentMsg, new Date()));
         }
 
         GamePrinter.thankYouForFeedback();

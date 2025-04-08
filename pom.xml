@@ -40,6 +40,21 @@
 			<artifactId>spring-security-test</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>6.4.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
 		<!-- Spring Boot Testing (Includes JUnit 5) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -52,14 +67,6 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
-		</dependency>
-
-		<!-- JLine to mask input -->
-		<dependency>
-			<groupId>org.jline</groupId>
-			<artifactId>jline</artifactId>
-			<version>3.28.0</version>
-			<scope>compile</scope>
 		</dependency>
 
 		<!-- PostgreSQL JDBC Driver -->

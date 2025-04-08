@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sk.tuke.gamestudio.entity.Player;
 import sk.tuke.gamestudio.entity.Score;
-import sk.tuke.gamestudio.service.jdbc.ScoreException;
+import sk.tuke.gamestudio.service.exceptions.ScoreException;
 import sk.tuke.gamestudio.service.jdbc.ScoreServiceJDBC;
 
 import java.sql.*;

@@ -1,13 +1,13 @@
 package sk.tuke.gamestudio.service.jpa;
 
-import jakarta.persistence.Entity;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import sk.tuke.gamestudio.entity.Comment;
-import sk.tuke.gamestudio.service.jdbc.CommentException;
-import sk.tuke.gamestudio.service.jdbc.CommentService;
+import sk.tuke.gamestudio.service.exceptions.CommentException;
+import sk.tuke.gamestudio.service.CommentService;
 
 import java.util.List;
 
@@ -23,7 +23,6 @@ public class CommentServiceJPA implements CommentService {
         if (isNotValidComment(comment)) {
             throw new CommentException("Invalid comment");
         }
-
         this.entityManager.persist(comment);
     }
 

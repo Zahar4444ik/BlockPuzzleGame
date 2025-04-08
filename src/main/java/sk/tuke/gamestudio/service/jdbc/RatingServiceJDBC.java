@@ -2,10 +2,13 @@ package sk.tuke.gamestudio.service.jdbc;
 
 import sk.tuke.gamestudio.entity.Player;
 import sk.tuke.gamestudio.entity.Rating;
+import sk.tuke.gamestudio.service.RatingService;
+import sk.tuke.gamestudio.service.exceptions.RatingException;
+import sk.tuke.gamestudio.service.exceptions.ScoreException;
 
 import java.sql.*;
 
-public class RatingServiceJDBC implements RatingService{
+public class RatingServiceJDBC implements RatingService {
     public static final String URL = "jdbc:postgresql://localhost/gamestudio";
     public static final String USER = "postgres";
     public static final String PASSWORD = "Zahar19%03";

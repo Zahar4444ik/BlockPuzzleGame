@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import sk.tuke.gamestudio.entity.Comment;
 import sk.tuke.gamestudio.entity.Player;
 import sk.tuke.gamestudio.service.jdbc.CommentServiceJDBC;
-import sk.tuke.gamestudio.service.jdbc.CommentException;
+import sk.tuke.gamestudio.service.exceptions.CommentException;
 
 import java.sql.*;
 import java.util.List;

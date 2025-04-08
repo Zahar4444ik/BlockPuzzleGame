@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import sk.tuke.gamestudio.entity.Player;
 import sk.tuke.gamestudio.entity.Rating;
 import sk.tuke.gamestudio.service.jdbc.RatingServiceJDBC;
-import sk.tuke.gamestudio.service.jdbc.RatingException;
+import sk.tuke.gamestudio.service.exceptions.RatingException;
 
 import java.sql.*;
 import static org.junit.jupiter.api.Assertions.*;

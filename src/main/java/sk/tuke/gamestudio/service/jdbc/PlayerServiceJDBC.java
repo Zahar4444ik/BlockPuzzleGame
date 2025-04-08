@@ -1,13 +1,14 @@
 package sk.tuke.gamestudio.service.jdbc;
 
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import sk.tuke.gamestudio.entity.Player;
 import sk.tuke.gamestudio.game.BlockPuzzle.consoleui.GamePrinter;
+import sk.tuke.gamestudio.service.PlayerService;
+import sk.tuke.gamestudio.service.exceptions.PlayerException;
 
 import java.sql.*;
 
-public class PlayerServiceJDBC implements PlayerService{
+public class PlayerServiceJDBC implements PlayerService {
     public static final String URL = "jdbc:postgresql://localhost/gamestudio";
     public static final String USER = "postgres";
     public static final String PASSWORD = "Zahar19%03";
@@ -18,7 +19,6 @@ public class PlayerServiceJDBC implements PlayerService{
     public static final String SELECT_PLAYER = "SELECT * FROM player WHERE nickname = ?";
     public static final String UPDATE_PLAYER = "UPDATE player SET score = ?, gamesPlayed = ?, lastPlayed = ? WHERE nickname = ?";
     public static final String DELETE_PLAYERS = "DELETE FROM player";
-    public static final String GET_PLAYER = "SELECT * FROM player WHERE nickname = ?";
 
     public PlayerServiceJDBC() {
         this.passwordEncoder = new BCryptPasswordEncoder();

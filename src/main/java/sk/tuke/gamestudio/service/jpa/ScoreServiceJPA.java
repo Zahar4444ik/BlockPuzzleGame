@@ -1,12 +1,13 @@
 package sk.tuke.gamestudio.service.jpa;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import sk.tuke.gamestudio.entity.Score;
-import sk.tuke.gamestudio.service.jdbc.ScoreException;
-import sk.tuke.gamestudio.service.jdbc.ScoreService;
+import sk.tuke.gamestudio.service.exceptions.ScoreException;
+import sk.tuke.gamestudio.service.ScoreService;
 
 import java.util.List;
 
@@ -23,14 +24,14 @@ public class ScoreServiceJPA implements ScoreService {
             throw new ScoreException("Invalid score");
         }
 
-        final Score previousScore = this.entityManager.createNamedQuery("Score.getExistingPlayerScore", Score.class)
-                .setParameter("game", score.getGame()).setParameter("player", score.getPlayer()).getSingleResult();
+        try {
+            Score previousScore = this.entityManager.createNamedQuery("Score.getExistingPlayerScore", Score.class)
+                    .setParameter("game", score.getGame()).setParameter("player", score.getPlayer()).getSingleResult();
 
-        if (previousScore != null){
             this.entityManager.createNamedQuery("Score.updateExistingPlayerScore")
                     .setParameter("points", score.getPoints()).setParameter("playedOn", score.getPlayedOn())
                     .setParameter("game", score.getGame()).setParameter("player", score.getPlayer()).executeUpdate();
-        } else {
+        }catch (NoResultException e) {
             this.entityManager.persist(score);
         }
     }
