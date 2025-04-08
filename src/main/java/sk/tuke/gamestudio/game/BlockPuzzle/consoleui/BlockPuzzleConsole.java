@@ -42,13 +42,13 @@ public class BlockPuzzleConsole {
 //    private CommentService commentService = new CommentServiceJDBC();
 
     @Autowired
-    private PlayerService playerService = new PlayerServiceJDBC();
+    private PlayerService playerService;
     @Autowired
-    private ScoreService scoreService = new ScoreServiceJDBC();
+    private ScoreService scoreService;
     @Autowired
-    private RatingService ratingService = new RatingServiceJDBC();
+    private RatingService ratingService;
     @Autowired
-    private CommentService commentService = new CommentServiceJDBC();
+    private CommentService commentService;
 
     public BlockPuzzleConsole() {
         this.inputHandler = new InputHandler();
@@ -63,7 +63,6 @@ public class BlockPuzzleConsole {
         GamePrinter.printComments(this.commentService.getComments(GAME_NAME));
 
         handleAuth();
-        playerService.updatePlayer(player);
 
         while(!this.isExit()){
 

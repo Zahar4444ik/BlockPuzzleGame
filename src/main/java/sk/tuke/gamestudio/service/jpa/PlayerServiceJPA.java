@@ -92,6 +92,8 @@ public class PlayerServiceJPA implements PlayerService {
     @Override
     public void updatePlayer(Player player) {
         if (!isNotValidPlayer(player)) {
+            String hashedPassword = passwordEncoder.encode(player.getPassword());
+            player.setPassword(hashedPassword);
             entityManager.merge(player);
         }
     }

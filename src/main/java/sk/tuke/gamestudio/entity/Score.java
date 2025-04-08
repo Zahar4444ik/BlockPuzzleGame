@@ -17,14 +17,15 @@ import java.util.Date;
 @NamedQuery(name = "Score.resetScores",
             query = "DELETE FROM Score")
 @NamedQuery(name = "Score.updateExistingPlayerScore",
-            query = "UPDATE Score s SET s.points = :points, s.playedOn = :playedOn WHERE s.game = :game AND s.player = :player")
+            query = "UPDATE Score s SET s.points = :points, s.playedOn = :played_on WHERE s.game = :game AND s.player = :player_nickname")
 @NamedQuery(name = "Score.getExistingPlayerScore",
-            query = "SELECT s FROM Score s WHERE s.game = :game AND s.player = :player")
+            query = "SELECT s FROM Score s WHERE s.game = :game AND s.player = :player_nickname")
 public class Score implements Serializable {
     private String game;
     @OneToOne
     private Player player;
     private int points;
+    @Column(name = "played_on")
     private Date playedOn;
 
     @Id

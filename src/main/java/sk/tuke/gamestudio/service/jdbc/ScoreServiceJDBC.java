@@ -13,9 +13,9 @@ public class ScoreServiceJDBC implements ScoreService {
     public static final String URL = "jdbc:postgresql://localhost/gamestudio";
     public static final String USER = "postgres";
     public static final String PASSWORD = "Zahar19%03";
-    public static final String SELECT = "SELECT game, player, points, playedOn FROM score WHERE game = ? ORDER BY points DESC LIMIT 10";
+    public static final String SELECT = "SELECT game, player, points, played_on FROM score WHERE game = ? ORDER BY points DESC LIMIT 10";
     public static final String DELETE = "DELETE FROM score";
-    public static final String INSERT = "INSERT INTO score (game, player, points, playedOn) VALUES (?, ?, ?, ?)";
+    public static final String INSERT = "INSERT INTO score (game, player, points, played_on) VALUES (?, ?, ?, ?)";
 
     public static final String PLAYER_EXISTS = "SELECT 1 FROM score WHERE player = ?";
 

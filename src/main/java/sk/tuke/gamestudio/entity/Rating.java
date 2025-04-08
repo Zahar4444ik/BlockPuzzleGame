@@ -21,8 +21,6 @@ import java.util.Date;
             query = "DELETE FROM Rating")
 @NamedQuery(name = "Rating.updateExistingPlayerRating",
             query = "UPDATE Rating r SET r.rating = :rating, r.ratedOn = :ratedOn WHERE r.game = :game AND r.player = :player")
-@NamedQuery(name = "Rating.getExistingPlayerRating",
-            query = "SELECT r FROM Rating r WHERE r.game = :game AND r.player = :player")
 public class Rating implements Serializable {
 
     @Id
@@ -32,8 +30,10 @@ public class Rating implements Serializable {
     private String game;
     @OneToOne
     private Player player;
-    private int rating; // 1 to 5 stars
+    private int rating;
+    @Column(name = "rated_on")
     private Date ratedOn;
+
 
     public Rating() {
     }

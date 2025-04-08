@@ -24,10 +24,13 @@ public class Comment implements Serializable {
     int ident;
 
     private String game;
+
     @ManyToOne
-    @JoinColumn(name = "player")
     private Player player;
+
     private String comment;
+
+    @Column(name = "commented_on")
     private Date commentedOn;
 
     public Comment() {}

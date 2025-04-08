@@ -23,7 +23,7 @@ public class RatingServiceJPA implements RatingService {
         }
 
         try {
-            Rating previousPlayerRating = this.entityManager.createNamedQuery("Rating.getExistingPlayerRating", Rating.class)
+            Rating previousPlayerRating = this.entityManager.createNamedQuery("Rating.getPlayerRating", Rating.class)
                     .setParameter("game", rating.getGame()).setParameter("player", rating.getPlayer()).getSingleResult();
 
             this.entityManager.createNamedQuery("Rating.updateExistingPlayerRating")

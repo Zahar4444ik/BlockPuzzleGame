@@ -26,11 +26,14 @@ public class ScoreServiceJPA implements ScoreService {
 
         try {
             Score previousScore = this.entityManager.createNamedQuery("Score.getExistingPlayerScore", Score.class)
-                    .setParameter("game", score.getGame()).setParameter("player", score.getPlayer()).getSingleResult();
+                    .setParameter("game", score.getGame()).setParameter("player_nickname", score.getPlayer()).getSingleResult();
 
-            this.entityManager.createNamedQuery("Score.updateExistingPlayerScore")
-                    .setParameter("points", score.getPoints()).setParameter("playedOn", score.getPlayedOn())
-                    .setParameter("game", score.getGame()).setParameter("player", score.getPlayer()).executeUpdate();
+            entityManager.createNamedQuery("Score.updateExistingPlayerScore")
+                    .setParameter("points", score.getPoints())
+                    .setParameter("played_on", score.getPlayedOn())
+                    .setParameter("player_nickname", score.getPlayer())
+                    .setParameter("game", score.getGame())
+                    .executeUpdate();
         }catch (NoResultException e) {
             this.entityManager.persist(score);
         }

@@ -15,9 +15,9 @@ public class PlayerServiceJDBC implements PlayerService {
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public static final String INSERT_PLAYER = "INSERT INTO player (nickname, password, score, gamesPlayed, lastPlayed) VALUES (?, ?, 0, 0, ?)";
+    public static final String INSERT_PLAYER = "INSERT INTO player (nickname, password, score, games_played, last_played) VALUES (?, ?, 0, 0, ?)";
     public static final String SELECT_PLAYER = "SELECT * FROM player WHERE nickname = ?";
-    public static final String UPDATE_PLAYER = "UPDATE player SET score = ?, gamesPlayed = ?, lastPlayed = ? WHERE nickname = ?";
+    public static final String UPDATE_PLAYER = "UPDATE player SET score = ?, games_played = ?, last_played = ? WHERE nickname = ?";
     public static final String DELETE_PLAYERS = "DELETE FROM player";
 
     public PlayerServiceJDBC() {
@@ -97,7 +97,7 @@ public class PlayerServiceJDBC implements PlayerService {
                     String password = rs.getString("password");
                     Player player = new Player(nickname, password);
                     player.setScore(rs.getInt("score"));
-                    player.setLastPlayed(rs.getTimestamp("lastPlayed"));
+                    player.setLastPlayed(rs.getTimestamp("last_played"));
                     return player;
                 }
             }

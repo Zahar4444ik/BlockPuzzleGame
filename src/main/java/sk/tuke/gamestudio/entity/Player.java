@@ -1,5 +1,6 @@
 package sk.tuke.gamestudio.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
@@ -21,7 +22,7 @@ import java.util.Date;
 @NamedQuery(name = "Player.getPlayer",
         query = "SELECT p FROM Player p WHERE p.nickname = :nickname")
 @NamedQuery(name = "Player.updatePlayer",
-        query = "UPDATE Player p SET p.score = :score, p.gamesPlayed = :gamesPlayed, p.lastPlayed = :lastPlayed WHERE p.nickname = :nickname")
+        query = "UPDATE Player p SET p.score = :score, p.gamesPlayed = :games_played, p.lastPlayed = :last_played WHERE p.nickname = :nickname")
 @NamedQuery(name = "Player.resetPlayers",
         query = "DELETE FROM Player")
 public class Player implements Serializable {
@@ -29,8 +30,13 @@ public class Player implements Serializable {
     private String nickname;
 
     private int score;
+
+    @Column(name = "games_played")
     private int gamesPlayed;
+
+    @Column(name = "last_played")
     private Date lastPlayed;
+
     private String password;
 
     public Player(String nickname, String password){
