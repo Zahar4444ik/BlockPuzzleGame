@@ -43,7 +43,7 @@ public class PlayerServiceJDBCTest {
         when(mockConnection.prepareStatement(PlayerServiceJDBC.INSERT_PLAYER)).thenReturn(mockStatement);
         when(mockStatement.executeUpdate()).thenReturn(1);
 
-        playerService.registerPlayer("Player1");
+        playerService.register("Player1", "password");
 
         verify(mockConnection).prepareStatement(PlayerServiceJDBC.SELECT_PLAYER);
         verify(mockStatement, times(1)).setString(eq(1), eq("Player1"));
@@ -95,7 +95,7 @@ public class PlayerServiceJDBCTest {
     void TestUpdatePlayerScore() throws SQLException{
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockStatement);
 
-        Player player = new Player("Player1");
+        Player player = new Player("Player1", "password");
         player.setScore(100);
         player.increaseGamesPlayed();
 

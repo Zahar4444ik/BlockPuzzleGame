@@ -1,9 +1,6 @@
 package sk.tuke.gamestudio.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.NamedQuery;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,11 +22,9 @@ import java.util.Date;
             query = "SELECT s FROM Score s WHERE s.game = :game AND s.player = :player")
 public class Score implements Serializable {
     private String game;
-
-    private String player;
-
+    @OneToOne
+    private Player player;
     private int points;
-
     private Date playedOn;
 
     @Id
@@ -38,7 +33,7 @@ public class Score implements Serializable {
 
     public Score() {}
 
-    public Score(String game, String player, int points, Date playedOn) {
+    public Score(String game, Player player, int points, Date playedOn) {
         this.game = game;
         this.player = player;
         this.points = points;

@@ -1,6 +1,7 @@
 package sk.tuke.gamestudio.service.jdbc;
 
 import sk.tuke.gamestudio.entity.Comment;
+import sk.tuke.gamestudio.entity.Player;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class CommentServiceJDBC  implements CommentService{
     public static final String DELETE = "DELETE FROM comment";
 
     @Override
-    public void addAndSetComment(Comment comment) {
+    public void addComment(Comment comment) {
         if (!isCommentValid(comment)) {
             throw new CommentException("Invalid comment");
         }
@@ -25,7 +26,7 @@ public class CommentServiceJDBC  implements CommentService{
              PreparedStatement statement = connection.prepareStatement(INSERT)
         ) {
             statement.setString(1, comment.getGame());
-            statement.setString(2, comment.getPlayer());
+            statement.setString(2, comment.getPlayer().getNickname());
             statement.setString(3, comment.getComment());
             statement.setTimestamp(4, new Timestamp(comment.getCommentedOn().getTime()));
             statement.executeUpdate();
@@ -43,7 +44,15 @@ public class CommentServiceJDBC  implements CommentService{
             try (ResultSet rs = statement.executeQuery()) {
                 List<Comment> comments = new ArrayList<>();
                 while (rs.next()) {
-                    comments.add(new Comment(rs.getString(1), rs.getString(2), rs.getString(3), rs.getTimestamp(4)));
+                    String nickname = rs.getString(2);
+                    PlayerServiceJDBC playerService = new PlayerServiceJDBC();
+
+                    comments.add(new Comment(
+                            rs.getString(1),
+                            playerService.getPlayer(nickname),
+                            rs.getString(3),
+                            rs.getTimestamp(4)
+                    ));
                 }
                 return comments;
             }

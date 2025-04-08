@@ -1,5 +1,6 @@
 package sk.tuke.gamestudio.service.jdbc;
 
+import sk.tuke.gamestudio.entity.Player;
 import sk.tuke.gamestudio.entity.Rating;
 
 import java.sql.*;
@@ -21,14 +22,14 @@ public class RatingServiceJDBC implements RatingService{
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(INSERT)
         ) {
-            if (playerExists(connection, rating.getPlayer())) {
-                updateExistingPlayer(connection, rating);
+            if (playerRatingExists(connection, rating.getPlayer())) {
+                updateExistingPlayerRating(connection, rating);
             } else {
                 addNewPlayerRating(statement, rating);
             }
 
         } catch (SQLException e) {
-            throw new RatingException("Problem inserting rating", e);
+            throw new RatingException("Problem inserting or updating rating", e);
         }
     }
 
@@ -78,9 +79,9 @@ public class RatingServiceJDBC implements RatingService{
         }
     }
 
-    private boolean playerExists(Connection connection, String player) throws SQLException {
+    private boolean playerRatingExists(Connection connection, Player player) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(PLAYER_EXISTS)) {
-            statement.setString(1, player);
+            statement.setString(1, player.getNickname());
             try (ResultSet rs = statement.executeQuery()) {
                 return rs.next();
             }
@@ -89,19 +90,19 @@ public class RatingServiceJDBC implements RatingService{
 
     private void addNewPlayerRating(PreparedStatement statement, Rating rating) throws SQLException {
         statement.setString(1, rating.getGame());
-        statement.setString(2, rating.getPlayer());
+        statement.setString(2, rating.getPlayer().getNickname());
         statement.setInt(3, rating.getRating());
         statement.setTimestamp(4, new Timestamp(rating.getRatedOn().getTime()));
         statement.executeUpdate();
     }
 
-    private void updateExistingPlayer(Connection connection, Rating rating) throws SQLException {
+    private void updateExistingPlayerRating(Connection connection, Rating rating) throws SQLException {
         final String UPDATE_RATING = "UPDATE rating SET rating = ?, rated_on = ? WHERE player = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_RATING)) {
             statement.setInt(1, rating.getRating());
             statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-            statement.setString(3, rating.getPlayer());
+            statement.setString(3, rating.getPlayer().getNickname());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new ScoreException("Problem updating score of existing player", e);

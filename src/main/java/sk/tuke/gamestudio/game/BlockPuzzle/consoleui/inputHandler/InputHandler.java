@@ -68,27 +68,42 @@ public class InputHandler {
         return Move.fromNumber(move);
     }
 
+    public AuthAction getAuthAction(){
+        GamePrinter.askForAuthAction();
+        int action = getIntInput(1, 3);
+        return AuthAction.fromNumber(action);
+    }
+
     public String enterPlayerNickname() {
         String nickname;
+        GamePrinter.askForPlayerNickname();
         do {
-            GamePrinter.askForPlayerNickname();
             nickname = scanner.nextLine();
         } while (nickname.length() > 64 || nickname.isBlank());
         return nickname;
     }
 
-    public char getYesNoAnswer() {
+    public String enterPlayerPassword() {
+        String password;
+        GamePrinter.askForPlayerPassword();
+        do {
+            password = scanner.nextLine();
+        } while (password.length() > 64 || password.isBlank());
+        return password;
+    }
+
+    public boolean getYesNoAnswer() {
         String input;
         do {
             input = scanner.nextLine().trim().toLowerCase();
             if (input.equals("y") || input.equals("yes")) {
-                return 'y';
+                return true;
             } else if (input.equals("n") || input.equals("no")) {
-                return 'n';
+                return false;
             }
         } while (!input.equals("y") && !input.equals("yes") && !input.equals("n") && !input.equals("no"));
 
-        return 'n';
+        return false;
     }
 
     public String getComment() {

@@ -2,6 +2,7 @@ package com.example.BlockPuzzle.servicetests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import sk.tuke.gamestudio.entity.Player;
 import sk.tuke.gamestudio.entity.Rating;
 import sk.tuke.gamestudio.service.jdbc.RatingServiceJDBC;
 import sk.tuke.gamestudio.service.jdbc.RatingException;
@@ -36,7 +37,8 @@ public class RatingServiceJDBCTest {
 
     @Test
     void testSetAndAddRatingForNewPlayer() throws SQLException {
-        Rating rating = new Rating("TestGame", "Player1", 5, new java.util.Date());
+        Player player = new Player("testPlayer", "testPassword");
+        Rating rating = new Rating("TestGame", player, 5, new java.util.Date());
 
         PreparedStatement mockStatement_temp = mock(PreparedStatement.class);
         ResultSet mockResultSet_temp = mock(ResultSet.class);
@@ -50,11 +52,11 @@ public class RatingServiceJDBCTest {
         ratingService.setAndAddRating(rating);
 
         verify(mockConnection).prepareStatement(RatingServiceJDBC.PLAYER_EXISTS);
-        verify(mockStatement_temp, times(1)).setString(eq(1), eq("Player1"));
+        verify(mockStatement_temp, times(1)).setString(eq(1), eq("testPlayer"));
         verify(mockResultSet_temp, times(1)).next();
 
         verify(mockStatement, times(1)).setString(eq(1), eq("TestGame"));
-        verify(mockStatement, times(1)).setString(eq(2), eq("Player1"));
+        verify(mockStatement, times(1)).setString(eq(2), eq("testPlayer"));
         verify(mockStatement, times(1)).setInt(eq(3), eq(5));
         verify(mockStatement, times(1)).setTimestamp(eq(4), any(Timestamp.class));
         verify(mockStatement, times(1)).executeUpdate();
@@ -62,7 +64,8 @@ public class RatingServiceJDBCTest {
 
     @Test
     void testSetAndAddRatingForExistingPlayer() throws SQLException {
-        Rating rating = new Rating("TestGame", "Player1", 4, new java.util.Date());
+        Player player = new Player("testPlayer", "testPassword");
+        Rating rating = new Rating("TestGame", player, 4, new java.util.Date());
 
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockStatement);
         when(mockStatement.executeUpdate()).thenReturn(1);
@@ -78,7 +81,7 @@ public class RatingServiceJDBCTest {
 
         verify(mockStatement, times(1)).setInt(1, 4);
         verify(mockStatement, times(1)).setTimestamp(eq(2), any(Timestamp.class));
-        verify(mockStatement, times(1)).setString(3, "Player1");
+        verify(mockStatement, times(1)).setString(3, "testPlayer");
         verify(mockStatement, times(1)).executeUpdate();
     }
 
@@ -136,7 +139,8 @@ public class RatingServiceJDBCTest {
 
     @Test
     void testSetAndAddRatingThrowsException() throws SQLException {
-        Rating rating = new Rating("TestGame", "Player1", 5, new java.util.Date());
+        Player player = new Player("testPlayer", "testPassword");
+        Rating rating = new Rating("TestGame", player, 5, new java.util.Date());
 
         when(mockConnection.prepareStatement(anyString())).thenThrow(new SQLException("Database error"));
 

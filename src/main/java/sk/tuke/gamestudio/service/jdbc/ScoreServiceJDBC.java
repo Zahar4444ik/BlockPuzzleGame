@@ -1,5 +1,6 @@
 package sk.tuke.gamestudio.service.jdbc;
 
+import sk.tuke.gamestudio.entity.Player;
 import sk.tuke.gamestudio.entity.Score;
 
 import java.sql.*;
@@ -26,7 +27,7 @@ public class ScoreServiceJDBC implements ScoreService {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(INSERT)
         ) {
-            if (!playerExists(connection, score.getPlayer())) {
+            if (!playerExists(connection, score.getPlayer().getNickname())) {
                 addNewPlayer(statement, score);
             } else {
                 updateExistingPlayer(connection, score);
@@ -44,8 +45,12 @@ public class ScoreServiceJDBC implements ScoreService {
             statement.setString(1, game);
             try (ResultSet rs = statement.executeQuery()) {
                 List<Score> scores = new ArrayList<>();
-                while (rs.next()) {
-                    scores.add(new Score(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getTimestamp(4)));
+                while (rs.next()) {;
+                    String playerNickname = rs.getString(2);
+                    PlayerServiceJDBC playerService = new PlayerServiceJDBC();
+                    int points = rs.getInt(3);
+                    Date playedOn = rs.getDate(4);
+                    scores.add(new Score(game, playerService.getPlayer(playerNickname), points, playedOn));
                 }
                 return scores;
             }
@@ -76,7 +81,7 @@ public class ScoreServiceJDBC implements ScoreService {
 
     private void addNewPlayer(PreparedStatement statement, Score score) throws SQLException {
             statement.setString(1, score.getGame());
-            statement.setString(2, score.getPlayer());
+            statement.setString(2, score.getPlayer().getNickname());
             statement.setInt(3, score.getPoints());
             statement.setTimestamp(4, new Timestamp(score.getPlayedOn().getTime()));
             statement.executeUpdate();
@@ -87,7 +92,7 @@ public class ScoreServiceJDBC implements ScoreService {
 
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_PLAYER)) {
             statement.setInt(1, score.getPoints());
-            statement.setString(2, score.getPlayer());
+            statement.setString(2, score.getPlayer().getNickname());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new ScoreException("Problem updating score of existing player", e);

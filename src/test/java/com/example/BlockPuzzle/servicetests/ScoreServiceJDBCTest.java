@@ -2,6 +2,7 @@ package com.example.BlockPuzzle.servicetests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import sk.tuke.gamestudio.entity.Player;
 import sk.tuke.gamestudio.entity.Score;
 import sk.tuke.gamestudio.service.jdbc.ScoreException;
 import sk.tuke.gamestudio.service.jdbc.ScoreServiceJDBC;
@@ -38,7 +39,8 @@ public class ScoreServiceJDBCTest {
 
     @Test
     void TestAddAndSetScore() throws SQLException{
-        final Score score = new Score("Player1", "TestGame", 100, new Date());
+        Player player = new Player("testPlayer", "testPassword");
+        final Score score = new Score("TestGame", player, 100, new Date());
 
         final PreparedStatement mockStatement_temp = mock(PreparedStatement.class);
         final ResultSet mockResultSet_temp = mock(ResultSet.class);
@@ -52,12 +54,12 @@ public class ScoreServiceJDBCTest {
         scoreService.addAndSetScore(score);
 
         verify(mockConnection).prepareStatement(ScoreServiceJDBC.PLAYER_EXISTS);
-        verify(mockStatement_temp).setString(eq(1), eq("TestGame"));
+        verify(mockStatement_temp).setString(eq(1), eq("testPlayer"));
         verify(mockResultSet_temp).next();
 
         verify(mockConnection).prepareStatement(ScoreServiceJDBC.INSERT);
-        verify(mockStatement).setString(eq(1), eq("Player1"));
-        verify(mockStatement).setString(eq(2), eq("TestGame"));
+        verify(mockStatement).setString(eq(1), eq("TestGame"));
+        verify(mockStatement).setString(eq(2), eq("testPlayer"));
         verify(mockStatement).setInt(eq(3), eq(100));
         verify(mockStatement).setTimestamp(eq(4), any());
         verify(mockStatement).executeUpdate();
@@ -87,7 +89,7 @@ public class ScoreServiceJDBCTest {
         assertFalse(scores.isEmpty());
         assertEquals(1, scores.size());
         assertEquals("TestGame", scores.get(0).getGame());
-        assertEquals("TestPlayer", scores.get(0).getPlayer());
+        assertEquals("TestPlayer", scores.get(0).getPlayer().getNickname());
         assertEquals(100, scores.get(0).getPoints());
     }
 

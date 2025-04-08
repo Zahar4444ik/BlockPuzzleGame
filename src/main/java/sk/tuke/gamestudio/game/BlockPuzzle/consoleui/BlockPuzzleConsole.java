@@ -1,5 +1,6 @@
 package sk.tuke.gamestudio.game.BlockPuzzle.consoleui;
 
+import sk.tuke.gamestudio.game.BlockPuzzle.consoleui.inputHandler.AuthAction;
 import sk.tuke.gamestudio.game.BlockPuzzle.consoleui.inputHandler.InputHandler;
 import sk.tuke.gamestudio.game.BlockPuzzle.core.board.Board;
 import sk.tuke.gamestudio.entity.Player;
@@ -35,7 +36,7 @@ public class BlockPuzzleConsole {
         GamePrinter.printAverageRating(new RatingServiceJDBC().getAverageRating(GAME_NAME));
         GamePrinter.printComments(new CommentServiceJDBC().getComments(GAME_NAME));
 
-        loginPlayer();
+        handleAuth();
         playerService.updatePlayer(player);
 
         while(!this.isExit()){
@@ -124,30 +125,48 @@ public class BlockPuzzleConsole {
         }
     }
 
-    private void loginPlayer() {
+    private void handleAuth() {
+        boolean successAuth = false;
 
-        String nickname = this.inputHandler.enterPlayerNickname();
-        if (playerService.playerExists(nickname)) {
-            this.player = playerService.getPlayer(nickname);
-            GamePrinter.playerAlreadyExists(player.getNickname(), player.getScore());
-        } else {
-            playerService.registerPlayer(nickname);
-            this.player = playerService.getPlayer(nickname);
-            GamePrinter.greetNewPlayer(player.getNickname());
+        while (!successAuth) {
+            AuthAction authAction = this.inputHandler.getAuthAction();
+
+            if (authAction == AuthAction.EXIT) {
+                this.gameState = GameState.EXITING;
+                return;
+            }
+
+            String nickname = this.inputHandler.enterPlayerNickname();
+            String password = this.inputHandler.enterPlayerPassword();
+
+            if (authAction == AuthAction.LOGIN) {
+                if (this.playerService.login(nickname, password)){
+                    this.player = playerService.getPlayer(nickname);
+                    GamePrinter.playerAlreadyExists(player.getNickname(), player.getScore());
+                    successAuth = true;
+                    player.setLastPlayed(new Date());
+                }
+            }
+            else if(authAction == AuthAction.REGISTER) {
+                if (this.playerService.register(nickname, password)){
+                    this.player = playerService.getPlayer(nickname);
+                    GamePrinter.greetNewPlayer(player.getNickname());
+                    successAuth = true;
+                    player.setLastPlayed(new Date());
+                }
+            }
         }
-
-        player.setLastPlayed(new Date());
     }
 
     private void getFeedback() {
         GamePrinter.askForRating();
-        if (this.inputHandler.getYesNoAnswer() == 'y') {
+        if (this.inputHandler.getYesNoAnswer()) {
             String rating = this.inputHandler.getRating();
             this.player.setRating(GAME_NAME, rating);
         }
 
         GamePrinter.askForComment();
-        if (this.inputHandler.getYesNoAnswer() == 'y') {
+        if (this.inputHandler.getYesNoAnswer()) {
 
             String comment = this.inputHandler.getComment();
             this.player.addComment(GAME_NAME, comment);

@@ -43,13 +43,17 @@ public class GamePrinter {
     public static void leaderboard(List<Score> topScores){
         System.out.println("\n🏆 Leaderboard:\n");
         for (Score s : topScores) {
-            System.out.println("🔹 " + s.getPlayer() + ": " + s.getPoints());
+            System.out.println("🔹 " + s.getPlayer().getNickname() + ": " + s.getPoints());
         }
         System.out.println();
     }
 
     public static void askForPlayerNickname(){
         System.out.print(ConsoleColor.BOLD + "Enter your nickname:" + ConsoleColor.RESET + " ");
+    }
+
+    public static void askForPlayerPassword(){
+        System.out.print(ConsoleColor.BOLD + "Enter your password:" + ConsoleColor.RESET + " ");
     }
 
     public static void displayGameLevels(){
@@ -223,9 +227,8 @@ public class GamePrinter {
                 break;
             }
             var comment = comments.get(commentIdx);
-            System.out.println(ConsoleColor.BLUE + comment.getPlayer() + ": " + ConsoleColor.RESET + comment.getComment());
+            System.out.println(ConsoleColor.BLUE + comment.getPlayer().getNickname() + ": " + ConsoleColor.RESET + comment.getComment());
         }
-        System.out.println();
     }
 
     public static void thankYouForFeedback(){
@@ -238,5 +241,25 @@ public class GamePrinter {
 
     public static void playerAlreadyExists(String nickname, int score){
         System.out.println("Welcome back, " + nickname + "!" + ConsoleColor.PURPLE + " Your previous score: " + score + ConsoleColor.RESET);
+    }
+
+    public static void askForAuthAction(){
+        System.out.println(ConsoleColor.BOLD + "\nDo you want to login or register?" + ConsoleColor.RESET);
+        System.out.println("1 - Login");
+        System.out.println("2 - Register");
+        System.out.println("3 - Exit");
+        System.out.println(ConsoleColor.BOLD + "Enter your choice (1-3):" + ConsoleColor.RESET + " ");
+    }
+
+    public static void playerWithNicknameAlreadyExists(String nickname){
+        System.out.println("❌ Player with nickname " + ConsoleColor.YELLOW + nickname + ConsoleColor.RESET + " already exists!");
+    }
+
+    public static void playerWithNicknameDoesNotExist(String nickname){
+        System.out.println("❌ Player with nickname " + ConsoleColor.YELLOW + nickname + ConsoleColor.RESET + " does not exist!");
+    }
+
+    public static void invalidPassword(){
+        System.out.println("❌ Invalid password! Please try again.");
     }
 }
