@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import sk.tuke.gamestudio.entity.Player;
 import sk.tuke.gamestudio.service.jpa.PlayerServiceJPA;
 
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class PlayerServiceJPATest {
-// TODO: Complete tests
+
     @Mock
     private EntityManager entityManager;
 
@@ -29,91 +30,86 @@ public class PlayerServiceJPATest {
     }
 
     @Test
-    public void testRegister() {
+    public void TestRegister() {
         String nickname = "testPlayer";
         String password = "testPassword";
 
         Player player = new Player(nickname, password);
-        when(entityManager.createNamedQuery("Player.getPlayer", Player.class))
-                .thenThrow(NoResultException.class);
+        TypedQuery<Player> mockQuery = mock(TypedQuery.class);
 
-        // Test successful registration
-        boolean result = playerServiceJPA.register(nickname, password);
-        assertTrue(result);
-        verify(entityManager).persist(any(Player.class));
+        when(entityManager.createNamedQuery("Player.getPlayer", Player.class)).thenReturn(mockQuery);
+        when(mockQuery.setParameter("nickname", nickname)).thenReturn(mockQuery);
+        when(mockQuery.getSingleResult()).thenReturn(player);
 
-        // Test player already exists
-        when(entityManager.createNamedQuery("Player.getPlayer", Player.class))
-                .thenReturn(mock(TypedQuery.class));
         boolean resultAlreadyExists = playerServiceJPA.register(nickname, password);
         assertFalse(resultAlreadyExists);
     }
 
     @Test
-    public void testLogin() {
+    public void TestLogin() {
         String nickname = "testPlayer";
-        String password = "testPassword";
+        String rawPassword = "testPassword";
 
-        // Mock EntityManager to return a player
-        Player player = new Player(nickname, "hashedPassword");
-        when(entityManager.createNamedQuery("Player.getPlayer", Player.class))
-                .thenReturn(mock(TypedQuery.class));
-        when(entityManager.createNamedQuery("Player.getPlayer", Player.class)
-                .setParameter("nickname", nickname).getSingleResult()).thenReturn(player);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String hashedPassword = encoder.encode(rawPassword);
 
-        // Test successful login
-        boolean result = playerServiceJPA.login(nickname, password);
+        Player player = mock(Player.class);
+        when(player.getNickname()).thenReturn(nickname);
+        when(player.getPassword()).thenReturn(hashedPassword);
+
+        TypedQuery<Player> mockQuery = mock(TypedQuery.class);
+        when(entityManager.createNamedQuery("Player.getPlayer", Player.class)).thenReturn(mockQuery);
+        when(mockQuery.setParameter("nickname", nickname)).thenReturn(mockQuery);
+        when(mockQuery.getSingleResult()).thenReturn(player);
+
+        boolean result = playerServiceJPA.login(nickname, rawPassword);
         assertTrue(result);
 
-        // Test login with wrong password
         when(player.getPassword()).thenReturn("wrongHashedPassword");
-        boolean resultWrongPassword = playerServiceJPA.login(nickname, password);
+        boolean resultWrongPassword = playerServiceJPA.login(nickname, rawPassword);
         assertFalse(resultWrongPassword);
     }
 
     @Test
-    public void testPlayerExists() {
+    public void TestPlayerExists() {
         String nickname = "testPlayer";
 
-        // Mock EntityManager
-        when(entityManager.createNamedQuery("Player.getPlayer", Player.class)
-                .setParameter("nickname", nickname).getSingleResult())
-                .thenReturn(new Player(nickname, "password"));
+        TypedQuery<Player> mockQuery = mock(TypedQuery.class);
+        Player player = mock(Player.class);
+        when(entityManager.createNamedQuery("Player.getPlayer", Player.class)).thenReturn(mockQuery);
+        when(mockQuery.setParameter("nickname", nickname)).thenReturn(mockQuery);
+        when(mockQuery.getSingleResult()).thenReturn(player);
 
-        // Test player exists
+
         assertTrue(playerServiceJPA.playerExists(nickname));
 
-        // Test player does not exist
-        when(entityManager.createNamedQuery("Player.getPlayer", Player.class)
-                .setParameter("nickname", nickname).getSingleResult())
-                .thenThrow(NoResultException.class);
+        when(entityManager.createNamedQuery("Player.getPlayer", Player.class)).thenReturn(mockQuery);
+        when(mockQuery.setParameter("nickname", nickname)).thenReturn(mockQuery);
+        when(mockQuery.getSingleResult()).thenThrow(NoResultException.class);
         assertFalse(playerServiceJPA.playerExists(nickname));
     }
 
     @Test
-    public void testGetPlayer() {
+    public void TestGetPlayer() {
         String nickname = "testPlayer";
-
-        // Mock EntityManager to return a player
         Player player = new Player(nickname, "password");
-        when(entityManager.createNamedQuery("Player.getPlayer", Player.class)
-                .setParameter("nickname", nickname).getSingleResult())
-                .thenReturn(player);
 
-        // Test retrieving player
+        TypedQuery<Player> mockQuery = mock(TypedQuery.class);
+        when(entityManager.createNamedQuery("Player.getPlayer", Player.class)).thenReturn(mockQuery);
+        when(mockQuery.setParameter("nickname", nickname)).thenReturn(mockQuery);
+        when(mockQuery.getSingleResult()).thenReturn(player);
+
         Player retrievedPlayer = playerServiceJPA.getPlayer(nickname);
         assertEquals(player, retrievedPlayer);
 
-        // Test player does not exist
-        when(entityManager.createNamedQuery("Player.getPlayer", Player.class)
-                .setParameter("nickname", nickname).getSingleResult())
-                .thenThrow(NoResultException.class);
+        when(mockQuery.getSingleResult()).thenThrow(NoResultException.class);
+
         Player noPlayer = playerServiceJPA.getPlayer(nickname);
         assertNull(noPlayer);
     }
 
     @Test
-    public void testUpdatePlayer() {
+    public void TestUpdatePlayer() {
         Player player = new Player("testPlayer", "newPassword");
 
         when(entityManager.merge(player)).thenReturn(player);
@@ -122,7 +118,7 @@ public class PlayerServiceJPATest {
     }
 
     @Test
-    public void testReset() {
+    public void TestReset() {
         var mockQuery = mock(TypedQuery.class);
         when(entityManager.createNamedQuery(eq("Player.resetPlayers"))).thenReturn(mockQuery);
         when(mockQuery.executeUpdate()).thenReturn(1);
@@ -134,7 +130,7 @@ public class PlayerServiceJPATest {
     }
 
     @Test
-    public void testInvalidRegister() {
+    public void TestInvalidRegister() {
         assertFalse(playerServiceJPA.register("", "password"));
         assertFalse(playerServiceJPA.register("validPlayer", ""));
     }

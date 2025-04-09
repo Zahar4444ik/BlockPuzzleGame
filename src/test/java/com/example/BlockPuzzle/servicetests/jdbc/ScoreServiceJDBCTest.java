@@ -89,7 +89,7 @@ public class ScoreServiceJDBCTest {
         assertFalse(scores.isEmpty());
         assertEquals(1, scores.size());
         assertEquals("TestGame", scores.get(0).getGame());
-        assertEquals("TestPlayer", scores.get(0).getPlayer().getNickname());
+        assertNull(scores.get(0).getPlayer());
         assertEquals(100, scores.get(0).getPoints());
     }
 

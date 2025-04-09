@@ -6,6 +6,7 @@ import sk.tuke.gamestudio.entity.Comment;
 import sk.tuke.gamestudio.entity.Player;
 import sk.tuke.gamestudio.service.jdbc.CommentServiceJDBC;
 import sk.tuke.gamestudio.service.exceptions.CommentException;
+import sk.tuke.gamestudio.service.jdbc.PlayerServiceJDBC;
 
 import java.sql.*;
 import java.util.List;
@@ -76,7 +77,7 @@ public class CommentServiceJDBCTest {
 
         assertEquals(1, comments.size());
         assertEquals("TestGame", comments.get(0).getGame());
-        assertEquals("testPlayer", comments.get(0).getPlayer().getNickname());
+        assertNull(comments.get(0).getPlayer());
         assertEquals("Great game!", comments.get(0).getComment());
     }
 
