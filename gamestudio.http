@@ -1,0 +1,95 @@
+POST http://localhost:9090/api/score
+Content-Type: application/json
+
+{
+  "game": "BlockPuzzle",
+  "playerDTO": {
+    "nickname": "Zakhar",
+    "score": 199,
+    "gamesPlayed": 5,
+    "lastPlayed": "2025-04-09T08:26:30.240Z",
+    "password": "Zakhar"
+  },
+  "points": 199,
+  "playedOn": "2020-01-01T00:00:00Z"
+}
+
+###
+POST http://localhost:9090/api/comment
+Content-Type: application/json
+
+{
+  "game": "BlockPuzzle",
+  "playerDTO": {
+    "nickname": "Killer",
+    "score": 15,
+    "gamesPlayed": 2,
+    "lastPlayed": "2025-04-09T08:26:30.240Z",
+    "password": "Killer"
+  },
+  "comment": "This game is awesome!",
+  "commentedOn": "2023-05-02T00:00:00Z"
+}
+
+###
+POST http://localhost:9090/api/rating
+Content-Type: application/json
+
+{
+  "game": "BlockPuzzle",
+  "playerDTO": {
+    "nickname": "Steve",
+    "score": 100,
+    "gamesPlayed": 5,
+    "lastPlayed": "2025-04-09T08:26:30.240Z",
+    "password": "Steve"
+  },
+  "rating": 5,
+  "ratedOn": "2024-02-01T00:00:00Z"
+}
+
+###
+POST http://localhost:9090/api/player/register
+Content-Type: application/json
+
+{
+  "nickname": "MrBeast",
+  "password": "MrBeast"
+}
+
+###
+POST http://localhost:9090/api/player/login
+Content-Type: application/json
+
+{
+  "nickname": "MrBeast",
+  "password": "MrBeast"
+}
+
+###
+PUT http://localhost:9090/api/player/update
+Content-Type: application/json
+
+{
+  "nickname": "MrBeast",
+  "score": 999,
+  "gamesPlayed": 10,
+  "lastPlayed": "2025-04-09T08:31:53.304Z",
+  "password": "MrBeast"
+}
+
+###
+GET http://localhost:9090/api/score/Block Puzzle
+Accept: application/json
+
+###
+GET http://localhost:9090/api/comment/Block Puzzle
+Accept: application/json
+
+###
+GET http://localhost:9090/api/rating/Block Puzzle
+Accept: application/json
+
+###
+GET http://localhost:9090/api/player/Zakhar
+Accept: application/json

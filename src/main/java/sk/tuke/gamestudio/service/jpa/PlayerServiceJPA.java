@@ -26,7 +26,7 @@ public class PlayerServiceJPA implements PlayerService {
     @Override
     public boolean register(String nickname, String password) {
         if (isNotValidParameter(nickname) || isNotValidParameter(password)) {
-            GamePrinter.invalidInput(); // TODO: probably throw errors and handle it on clientside and record a video
+            GamePrinter.invalidInput();
             return false;
         }
         if (playerExists(nickname)){
