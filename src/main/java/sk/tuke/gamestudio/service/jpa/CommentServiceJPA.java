@@ -41,6 +41,7 @@ public class CommentServiceJPA implements CommentService {
         return comment == null ||
                 comment.getGame() == null ||
                 comment.getPlayer() == null ||
-                comment.getComment() == null;
+                comment.getComment() == null ||
+                comment.getCommentedOn() == null;
     }
 }

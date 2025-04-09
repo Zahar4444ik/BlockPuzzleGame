@@ -26,7 +26,7 @@ public class PlayerServiceJPA implements PlayerService {
     @Override
     public boolean register(String nickname, String password) {
         if (isNotValidParameter(nickname) || isNotValidParameter(password)) {
-            GamePrinter.invalidInput();
+            GamePrinter.invalidInput(); // TODO: probably throw errors and handle it on clientside and record a video
             return false;
         }
         if (playerExists(nickname)){
@@ -61,7 +61,9 @@ public class PlayerServiceJPA implements PlayerService {
             return false;
         }
 
-        return passwordEncoder.matches(password, player.getPassword());
+        boolean success = passwordEncoder.matches(password, player.getPassword());
+        if (!success) {GamePrinter.invalidPassword();}
+        return success;
     }
 
     @Override

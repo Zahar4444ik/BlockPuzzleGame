@@ -1,4 +1,4 @@
-package com.example.BlockPuzzle.servicetests;
+package com.example.BlockPuzzle.servicetests.jdbc;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,7 +73,7 @@ public class PlayerServiceJDBCTest {
 
         boolean exists = playerService.playerExists("Player1");
 
-        assertTrue(!exists);
+        assertFalse(exists);
         verify(mockStatement, times(1)).setString(1, "Player1");
     }
 

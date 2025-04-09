@@ -77,6 +77,7 @@ public class RatingServiceJPA implements RatingService {
         return rating == null ||
                 rating.getGame() == null ||
                 rating.getPlayer() == null ||
+                rating.getRatedOn() == null ||
                 rating.getRating() < 1 ||
                 rating.getRating() > 5;
     }

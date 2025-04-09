@@ -245,10 +245,11 @@ public class GamePrinter {
 
     public static void askForAuthAction(){
         System.out.println(ConsoleColor.BOLD + "\nDo you want to login or register?" + ConsoleColor.RESET);
-        System.out.println("1 - Login");
-        System.out.println("2 - Register");
-        System.out.println("3 - Exit");
-        System.out.println(ConsoleColor.BOLD + "Enter your choice (1-3):" + ConsoleColor.RESET + " ");
+        System.out.println(ConsoleColor.CYAN + "1 - Login" + ConsoleColor.RESET);
+        System.out.println(ConsoleColor.CYAN + "2 - Register" + ConsoleColor.RESET);
+        System.out.println(ConsoleColor.RED + "3 - Exit" + ConsoleColor.RESET);
+
+        System.out.print("\n" + ConsoleColor.BOLD + "Enter your choice (1-3): " + ConsoleColor.RESET);;
     }
 
     public static void playerWithNicknameAlreadyExists(String nickname){

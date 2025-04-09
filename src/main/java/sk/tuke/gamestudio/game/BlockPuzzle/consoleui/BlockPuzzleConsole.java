@@ -29,6 +29,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import static java.lang.System.exit;
+
 @Component
 public class BlockPuzzleConsole {
     public final static String GAME_NAME = "Block Puzzle";
@@ -159,7 +161,8 @@ public class BlockPuzzleConsole {
 
             if (authAction == AuthAction.EXIT) {
                 this.gameState = GameState.EXITING;
-                return;
+                GamePrinter.goodbye();
+                exit(1);
             }
 
             String nickname = this.inputHandler.enterPlayerNickname();
