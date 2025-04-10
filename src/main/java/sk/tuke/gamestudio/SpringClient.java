@@ -13,7 +13,7 @@ import sk.tuke.gamestudio.game.BlockPuzzle.consoleui.BlockPuzzleConsole;
 
 @SpringBootApplication
 @Configuration
-@ComponentScan({"sk.tuke.gamestudio.game.BlockPuzzle", "sk.tuke.gamestudio.service.restclient"})
+@ComponentScan({"sk.tuke.gamestudio.service.restclient"})
 public class SpringClient {
     public static void main(String[] args) {
         new SpringApplicationBuilder(SpringClient.class).web(WebApplicationType.NONE).run(args);
