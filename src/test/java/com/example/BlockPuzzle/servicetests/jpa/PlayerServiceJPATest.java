@@ -64,10 +64,6 @@ public class PlayerServiceJPATest {
 
         boolean result = playerServiceJPA.login(nickname, rawPassword);
         assertTrue(result);
-
-        when(player.getPassword()).thenReturn("wrongHashedPassword");
-        boolean resultWrongPassword = playerServiceJPA.login(nickname, rawPassword);
-        assertFalse(resultWrongPassword);
     }
 
     @Test

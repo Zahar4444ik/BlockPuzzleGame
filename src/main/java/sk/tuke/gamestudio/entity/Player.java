@@ -18,7 +18,6 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@ToString(exclude = "password")
 @NamedQuery(name = "Player.getPlayer",
         query = "SELECT p FROM Player p WHERE p.nickname = :nickname")
 @NamedQuery(name = "Player.updatePlayer",

@@ -2,7 +2,7 @@ POST http://localhost:9090/api/score
 Content-Type: application/json
 
 {
-  "game": "BlockPuzzle",
+  "game": "Block Puzzle",
   "playerDTO": {
     "nickname": "Zakhar",
     "score": 199,
@@ -19,7 +19,7 @@ POST http://localhost:9090/api/comment
 Content-Type: application/json
 
 {
-  "game": "BlockPuzzle",
+  "game": "Block Puzzle",
   "playerDTO": {
     "nickname": "Killer",
     "score": 15,
@@ -36,7 +36,7 @@ POST http://localhost:9090/api/rating
 Content-Type: application/json
 
 {
-  "game": "BlockPuzzle",
+  "game": "Block Puzzle",
   "playerDTO": {
     "nickname": "Steve",
     "score": 100,

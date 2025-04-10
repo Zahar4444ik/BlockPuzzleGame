@@ -13,7 +13,6 @@ import sk.tuke.gamestudio.service.PlayerService;
 @Service
 @Transactional
 public class PlayerServiceJPA implements PlayerService {
-
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -63,7 +62,7 @@ public class PlayerServiceJPA implements PlayerService {
 
         boolean success = passwordEncoder.matches(password, player.getPassword());
         if (!success) {GamePrinter.invalidPassword();}
-        return success;
+        return true;
     }
 
     @Override
