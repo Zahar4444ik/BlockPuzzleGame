@@ -1,12 +1,20 @@
 package sk.tuke.gamestudio.server.webservice;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import sk.tuke.gamestudio.DTO.LoginDTO;
+import sk.tuke.gamestudio.DTO.auth.LoginDTO;
 import sk.tuke.gamestudio.DTO.PlayerDTO;
-import sk.tuke.gamestudio.DTO.RegisterDTO;
+import sk.tuke.gamestudio.DTO.auth.RegisterDTO;
 import sk.tuke.gamestudio.entity.Player;
 import sk.tuke.gamestudio.service.PlayerService;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 
 @RestController
 @RequestMapping("api/player")
@@ -14,6 +22,12 @@ public class PlayerServiceRest {
 
     @Autowired
     private PlayerService playerService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("{nickname}")
     public Player getPlayer(@PathVariable String nickname) {
@@ -26,8 +40,35 @@ public class PlayerServiceRest {
     }
 
     @PostMapping("/login")
-    public boolean login(@RequestBody LoginDTO loginRequest) {
-        return playerService.login(loginRequest.getNickname(), loginRequest.getPassword());
+    public boolean login(@RequestBody LoginDTO loginRequest, HttpServletRequest request) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getNickname(), loginRequest.getPassword())
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            request.getSession(true)  // Create session if not exists
+                    .setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+            return true;
+        } catch (AuthenticationException e) {
+            return false;
+        }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        request.getSession(false); // Get current session, but don't create a new one
+        if (request.getSession(false) != null) {
+            request.getSession(false).invalidate(); // Invalidate the session
+        }
+        SecurityContextHolder.clearContext(); // Clear security context
+        return ResponseEntity.ok("Logged out successfully");
+    }
+
+    @GetMapping("/authenticated")
+    public boolean isAuthenticated() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAuthenticated = auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal());
+        return isAuthenticated;
     }
 
     @PutMapping("/update")

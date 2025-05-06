@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+:root {
+    --bg-base: #0B132B;
+    --bg-section: #1C2541;
+    --bg-section-bright: #3A506B;
+    --text-gray: #0B132B;
+    --color-primary: #5BC0BE;
+    --color-highlight: #6FFFE9;
+    --text-secondary: #6FFFE9;
+}
+
+.login-page {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-base);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    justify-content: center;
+}
+
+.login-container {
+    max-width: 450px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: var(--bg-section-bright);
+    border-radius: 0.75rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-highlight);
+    text-shadow: 0 0 5px var(--color-highlight);
+    margin-bottom: 1.5rem;
+}
+
+.error-message {
+    color: #ff6b6b;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+input {
+    background-color: var(--bg-section);
+    border: 1px solid #4a5568;
+    color: var(--text-secondary);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    transition: border-color 0.3s ease;
+}
+
+input:focus {
+    border-color: var(--color-highlight);
+    outline: none;
+    box-shadow: 0 0 8px var(--color-highlight);
+}
+
+input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+    font-style: italic;
+}
+
+.submit-btn {
+    background: var(--bg-section);
+    color: var(--color-highlight);
+    border: 3px solid var(--color-primary);
+    box-shadow: 0 0 10px var(--color-primary);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: var(--bg-section-bright);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px var(--color-primary);
+}
+
+.link-text {
+    color: var(--text-secondary);
+    margin-top: 1rem;
+    text-align: center;
+    text-shadow: 0 0 3px rgba(111, 255, 233, 0.5);
+    font-weight: 500;
+}
+
+.link-text a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.link-text a:hover {
+    color: var(--color-highlight);
+    text-decoration: underline;
+}

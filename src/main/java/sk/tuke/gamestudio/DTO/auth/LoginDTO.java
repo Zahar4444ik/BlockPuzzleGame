@@ -1,4 +1,4 @@
-package sk.tuke.gamestudio.DTO;
+package sk.tuke.gamestudio.DTO.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

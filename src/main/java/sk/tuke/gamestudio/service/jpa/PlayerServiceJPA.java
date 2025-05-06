@@ -4,7 +4,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import sk.tuke.gamestudio.entity.Player;
 import sk.tuke.gamestudio.game.BlockPuzzle.consoleui.GamePrinter;
@@ -16,10 +18,11 @@ public class PlayerServiceJPA implements PlayerService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public PlayerServiceJPA() {
-        this.passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    public PlayerServiceJPA(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -37,6 +40,7 @@ public class PlayerServiceJPA implements PlayerService {
 
         Player newPlayer = new Player(nickname, hashedPassword);
         entityManager.persist(newPlayer);
+        System.out.println("Player registered: " + newPlayer.getNickname());
         return true;
     }
 
@@ -62,7 +66,7 @@ public class PlayerServiceJPA implements PlayerService {
 
         boolean success = passwordEncoder.matches(password, player.getPassword());
         if (!success) {GamePrinter.invalidPassword();}
-        return true;
+        return success;
     }
 
     @Override

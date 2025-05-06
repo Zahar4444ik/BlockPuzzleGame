@@ -60,11 +60,12 @@ public class BlockPuzzleConsole {
 
     public void start() {
         GamePrinter.welcome();
+
+        handleAuth();
+
         GamePrinter.leaderboard(this.scoreService.getTopScores(GAME_NAME));
         GamePrinter.printAverageRating(this.ratingService.getAverageRating(GAME_NAME));
         GamePrinter.printComments(this.commentService.getComments(GAME_NAME));
-
-        handleAuth();
 
         while(!this.isExit()){
 
