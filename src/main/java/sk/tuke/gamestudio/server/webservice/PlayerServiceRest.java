@@ -79,4 +79,13 @@ public class PlayerServiceRest {
         player.setScore(playerDTO.getScore());
         this.playerService.updatePlayer(player);
     }
+
+    @GetMapping("/current-nickname")
+    public String getCurrentNickname() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
+            return auth.getName(); // Returns the nickname (principal name)
+        }
+        return null;
+    }
 }

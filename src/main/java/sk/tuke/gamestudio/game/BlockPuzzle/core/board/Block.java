@@ -1,5 +1,6 @@
 package sk.tuke.gamestudio.game.BlockPuzzle.core.board;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import sk.tuke.gamestudio.game.BlockPuzzle.consoleui.ConsoleColor;
 
@@ -19,5 +20,10 @@ public class Block {
 
     public int getHeight() {
         return shape.length;
+    }
+
+    @JsonProperty("color")
+    public int[] getColorAsRgb() {
+        return color != null ? color.getRgb() : null;
     }
 }

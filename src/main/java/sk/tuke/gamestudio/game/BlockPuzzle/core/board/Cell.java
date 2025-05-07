@@ -1,5 +1,7 @@
 package sk.tuke.gamestudio.game.BlockPuzzle.core.board;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import sk.tuke.gamestudio.game.BlockPuzzle.consoleui.ConsoleColor;
@@ -15,7 +17,7 @@ public class Cell {
         this.color = color;
     }
 
-    public Cell(ConsoleColor color){
+    public Cell(ConsoleColor color) {
         this.symbol = CellState.FILLED.getSymbol();
         this.color = color;
     }
@@ -28,7 +30,24 @@ public class Cell {
         return new Cell(CellState.EMPTY_BOARD.getSymbol(), ConsoleColor.RESET);
     }
 
-    public void printCell(){
+    @JsonProperty("state")
+    public String getState() {
+        if (symbol == CellState.FILLED.getSymbol()) {
+            return "FILLED";
+        } else if (symbol == CellState.EMPTY_BLOCK.getSymbol()) {
+            return "EMPTY_BLOCK";
+        } else {
+            return "EMPTY_BOARD";
+        }
+    }
+
+    @JsonProperty("color")
+    public int[] getColorAsRgb() {
+        return color != null ? color.getRgb() : null;
+    }
+
+    @JsonIgnore
+    public void printCell() {
         System.out.print(this.color.toString() + this.symbol + ConsoleColor.RESET + " ");
     }
 }

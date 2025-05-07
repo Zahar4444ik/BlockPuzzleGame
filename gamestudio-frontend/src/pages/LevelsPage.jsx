@@ -18,14 +18,9 @@ const LevelsPage = () => {
         setSelectedLevel(level);
         if (level.name === "EXIT") {
             navigate("/");
-        } else if (level.name === "EASY") {
-            navigate("/level-easy");
+        } else {
+            navigate(`/level?difficulty=${level.name}`);
         }
-        // else if (level.name === "MEDIUM") {
-        //     navigate("/level-medium");
-        // } else if (level.name === "HARD") {
-        //     navigate("/level-hard");
-        // }
     };
 
     return (

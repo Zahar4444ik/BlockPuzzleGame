@@ -23,6 +23,18 @@
     position: relative;
 }
 
+.score-display {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--color-highlight);
+    text-shadow: var(--neon-glow);
+    margin-bottom: 20px;
+    background: rgba(11, 19, 43, 0.7);
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 2px solid var(--color-highlight);
+}
+
 .game-layout {
     display: flex;
     gap: 40px;
@@ -40,8 +52,6 @@
 
 .board {
     display: grid;
-    grid-template-columns: repeat(5, 50px);
-    grid-template-rows: repeat(5, 50px);
     gap: 1px;
     background: var(--color-highlight);
     border-radius: 5px;
@@ -82,10 +92,6 @@
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.6);
 }
 
-.block-section .cell:hover {
-    box-shadow: 0 0 20px rgba(111, 255, 233, 1), 0 0 40px rgba(111, 255, 233, 0.8);
-}
-
 .win-overlay {
     position: absolute;
     top: 50%;
@@ -102,7 +108,7 @@
     font-size: 48px;
     font-weight: 800;
     text-shadow: var(--neon-glow);
-    background: rgba(11, 19, 43, 0.9); /* Slightly more opaque */
+    background: rgba(11, 19, 43, 0.9);
     padding: 25px 50px;
     border-radius: 15px;
     border: 3px solid var(--color-highlight);
@@ -115,14 +121,14 @@
 
 .win-button {
     font-family: 'Inter', sans-serif;
-    font-size: 24px; /* Increased from 18px */
-    font-weight: 800; /* Bolder text */
-    padding: 15px 30px; /* Increased padding */
+    font-size: 24px;
+    font-weight: 800;
+    padding: 15px 30px;
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 3px solid; /* Thicker border */
-    background: rgba(11, 19, 43, 0.7); /* Opaque background */
+    border: 3px solid;
+    background: rgba(11, 19, 43, 0.7);
 }
 
 .win-button.play-again {
@@ -134,7 +140,7 @@
 .win-button.play-again:hover {
     background: var(--color-highlight);
     color: var(--bg-base);
-    box-shadow: 0 0 20px rgba(111, 255, 233, 0.9), 0 0 40px rgba(111, 255, 233, 0.7); /* Stronger glow */
+    box-shadow: 0 0 20px rgba(111, 255, 233, 0.9), 0 0 40px rgba(111, 255, 233, 0.7);
 }
 
 .win-button.exit {
@@ -146,5 +152,5 @@
 .win-button.exit:hover {
     background: #FF6B6B;
     color: var(--bg-base);
-    box-shadow: 0 0 20px rgba(255, 107, 107, 0.9), 0 0 40px rgba(255, 107, 107, 0.7); /* Stronger glow */
+    box-shadow: 0 0 20px rgba(255, 107, 107, 0.9), 0 0 40px rgba(255, 107, 107, 0.7);
 }

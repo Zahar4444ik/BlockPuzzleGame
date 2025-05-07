@@ -7,37 +7,40 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 import { AuthProvider } from "./context/AuthContext";
 import LevelsPage from "./pages/LevelsPage";
-import EasyLevelPage from "./pages/levels/EasyLevelPage";
+import LevelPage from "./pages/LevelPage";
+import {PlayerStatsProvider} from "./context/PlayerStatsContext";
 
 function App() {
 
     return (
         <AuthProvider>
-            <Router>
-                <Routes>
-                    <Route element={<Layout />}>
-                        <Route path="/" element={<HomePage />} />
-                        <Route path="/login" element={<LoginPage />} />
-                        <Route path="/register" element={<RegisterPage />} />
-                        <Route
-                            path="/levels"
-                            element={
-                                <ProtectedRoute>
-                                    <LevelsPage />
-                                </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/level-easy"
-                            element={
-                                <ProtectedRoute>
-                                    <EasyLevelPage />
-                                </ProtectedRoute>
-                            }
-                        />
-                    </Route>
-                </Routes>
-            </Router>
+            <PlayerStatsProvider>
+                <Router>
+                    <Routes>
+                        <Route element={<Layout />}>
+                            <Route path="/" element={<HomePage />} />
+                            <Route path="/login" element={<LoginPage />} />
+                            <Route path="/register" element={<RegisterPage />} />
+                            <Route
+                                path="/levels"
+                                element={
+                                    <ProtectedRoute>
+                                        <LevelsPage />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/level"
+                                element={
+                                    <ProtectedRoute>
+                                        <LevelPage />
+                                    </ProtectedRoute>
+                                }
+                            />
+                        </Route>
+                    </Routes>
+                </Router>
+            </PlayerStatsProvider>
         </AuthProvider>
     );
 }

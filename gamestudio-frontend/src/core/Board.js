@@ -1,17 +1,13 @@
-import Cell from "./cell/Cell";
 import CellState from "./cell/CellState";
+import Cell from "./cell/Cell";
+import Position from "./Position";
 
 class Board {
-    constructor(rows, cols, shape = null) {
+    constructor(rows, cols) {
         this.rows = rows;
         this.cols = cols;
-        if (shape) {
-            this.grid = shape;
-        } else {
-            this.grid = Array(rows)
-                .fill()
-                .map(() => Array(cols).fill().map(() => new Cell(CellState.EMPTY)));
-        }
+        this.grid = Array(rows).fill().map(() => Array(cols).fill(new Cell(CellState.EMPTY, [0, 0, 0])));
+        this.blockMap = new Map(); // Map<Position, Block> using Position with equals
     }
 
     getRows() {
@@ -26,84 +22,78 @@ class Board {
         return this.grid;
     }
 
-    drawBoard(p, cellSize, xOffset, yOffset) {
-        for (let row = 0; row < this.rows; row++) {
-            for (let col = 0; col < this.cols; col++) {
-                const cell = this.grid[row][col];
-                const x = xOffset + col * cellSize;
-                const y = yOffset + row * cellSize;
-
-                if (cell.getState() === CellState.FILLED && cell.getColor()) {
-                    p.fill(cell.getColor());
-                    p.noStroke();
-                } else {
-                    p.fill(28, 37, 65); // #1C2541 for empty cells
-                    p.stroke(111, 255, 233); // #6FFFE9 for borders
+    canPlaceBlock(block, row, col, offsetRow, offsetCol) {
+        const shape = block.getShape();
+        for (let i = 0; i < shape.length; i++) {
+            for (let j = 0; j < shape[0].length; j++) {
+                if (shape[i][j].getState() === CellState.FILLED) {
+                    const newRow = row + i - offsetRow;
+                    const newCol = col + j - offsetCol;
+                    if (newRow < 0 || newRow >= this.rows || newCol < 0 || newCol >= this.cols) {
+                        return false;
+                    }
+                    if (this.grid[newRow][newCol].getState() === CellState.FILLED) {
+                        return false;
+                    }
                 }
-                p.rect(x, y, cellSize, cellSize);
+            }
+        }
+        return true;
+    }
+
+    placeBlock(block, row, col, offsetRow, offsetCol) {
+        const shape = block.getShape();
+        for (let i = 0; i < shape.length; i++) {
+            for (let j = 0; j < shape[0].length; j++) {
+                if (shape[i][j].getState() === CellState.FILLED) {
+                    const newRow = row + i - offsetRow;
+                    const newCol = col + j - offsetCol;
+                    if (newRow >= 0 && newRow < this.rows && newCol >= 0 && newCol < this.cols) {
+                        this.grid[newRow][newCol] = new Cell(CellState.FILLED, shape[i][j].getColor());
+                        const pos = new Position(newRow, newCol);
+                        this.blockMap.set(pos, block); // Use Position as key
+                        console.log(`Placed block at (${pos.getRow()}, ${pos.getCol()}) in blockMap`);
+                    }
+                }
             }
         }
     }
 
     isFull() {
-        for (let row = 0; row < this.rows; row++) {
-            for (let col = 0; col < this.cols; col++) {
-                if (this.grid[row][col].getState() === CellState.EMPTY) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return this.grid.every(row => row.every(cell => cell.getState() === CellState.FILLED));
     }
 
-    canPlaceBlock(block, anchorRow, anchorCol, offsetRow, offsetCol) {
-        const shape = block.getShape();
-        const height = block.getHeight();
-        const width = block.getWidth();
-
-        const topLeftRow = anchorRow - offsetRow;
-        const topLeftCol = anchorCol - offsetCol;
-
-        if (topLeftRow < 0 || topLeftCol < 0 || topLeftRow + height > this.rows || topLeftCol + width > this.cols) {
-            return false;
-        }
-
-        for (let rowIdx = 0; rowIdx < height; rowIdx++) {
-            for (let colIdx = 0; colIdx < width; colIdx++) {
-                if (
-                    shape[rowIdx][colIdx].getState() === CellState.FILLED &&
-                    this.grid[topLeftRow + rowIdx][topLeftCol + colIdx].getState() !== CellState.EMPTY
-                ) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
+    canRemoveBlock(row, col) {
+        const pos = new Position(row, col);
+        console.log(`Checking removal at (${pos.getRow()}, ${pos.getCol()}), blockMap has:`, Array.from(this.blockMap.keys()).map(p => `(${p.getRow()}, ${p.getCol()})`));
+        return this.blockMap.has(pos);
     }
 
-    placeBlock(block, anchorRow, anchorCol, offsetRow, offsetCol) {
-        const topLeftRow = anchorRow - offsetRow;
-        const topLeftCol = anchorCol - offsetCol;
-
-        if (!this.canPlaceBlock(block, anchorRow, anchorCol, offsetRow, offsetCol)) {
-            return false;
+    removeBlock(row, col) {
+        const pos = new Position(row, col);
+        console.log(`Attempting to remove block at (${pos.getRow()}, ${pos.getCol()}), blockMap size: ${this.blockMap.size}`);
+        if (!this.blockMap.has(pos)) {
+            console.log(`No block found at (${pos.getRow()}, ${pos.getCol()})`);
+            return null; // No block at this position
         }
 
-        const shape = block.getShape();
-        const width = block.getWidth();
-        const height = block.getHeight();
+        const block = this.blockMap.get(pos);
 
-        for (let rowIdx = 0; rowIdx < height; rowIdx++) {
-            for (let colIdx = 0; colIdx < width; colIdx++) {
-                if (shape[rowIdx][colIdx].getState() === CellState.FILLED) {
-                    this.grid[topLeftRow + rowIdx][topLeftCol + colIdx].setState(CellState.FILLED);
-                    this.grid[topLeftRow + rowIdx][topLeftCol + colIdx].setColor(block.getColor());
+        // Clear only the cells associated with this specific position's block
+        for (let rowIdx = 0; rowIdx < this.rows; rowIdx++) {
+            for (let colIdx = 0; colIdx < this.cols; colIdx++) {
+                const currentPos = new Position(rowIdx, colIdx);
+                if (this.blockMap.get(currentPos) === block) {
+                    this.grid[rowIdx][colIdx].setState(CellState.EMPTY);
+                    this.grid[rowIdx][colIdx].setColor([0, 0, 0]);
+                    this.blockMap.delete(currentPos);
+                    console.log(`Removed cell at (${rowIdx}, ${colIdx})`);
                 }
             }
         }
 
-        return true;
+        console.log(`Successfully removed block, new blockMap size: ${this.blockMap.size}`);
+        return block; // Return the removed block
     }
 }
 

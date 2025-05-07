@@ -1,5 +1,6 @@
 package sk.tuke.gamestudio.game.BlockPuzzle.core.board;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import sk.tuke.gamestudio.game.BlockPuzzle.consoleui.ConsoleColor;
 import sk.tuke.gamestudio.game.BlockPuzzle.core.Position;
@@ -14,6 +15,7 @@ public class Board {
     private final int cols;
     @Getter
     private final Cell[][] grid;
+    @JsonIgnore
     private final Map<Position, Block> blockMap;
 
     public Board(int rows, int cols) {
@@ -32,7 +34,7 @@ public class Board {
         }
     }
 
-    public boolean canPlaceBlock(Block block, int row, int col){
+    public boolean canPlaceBlock(Block block, int row, int col) {
         Cell[][] shape = block.getShape();
         int width = block.getWidth();
         int height = block.getHeight();
@@ -54,7 +56,7 @@ public class Board {
     }
 
     public boolean placeBlock(Block block, int row, int col) {
-        if (!this.canPlaceBlock(block, row, col)){
+        if (!this.canPlaceBlock(block, row, col)) {
             return false;
         }
 
@@ -63,11 +65,11 @@ public class Board {
         int width = block.getWidth();
         int height = block.getHeight();
 
-        for (int rowIdx = 0; rowIdx < height; rowIdx++){
-            for (int colIdx = 0; colIdx < width; colIdx++){
-                if (shape[rowIdx][colIdx].getSymbol() == CellState.FILLED.getSymbol()){
-                    this.grid[row+ rowIdx][col+ colIdx].setSymbol(CellState.FILLED.getSymbol());
-                    this.grid[row+ rowIdx][col+ colIdx].setColor(color);
+        for (int rowIdx = 0; rowIdx < height; rowIdx++) {
+            for (int colIdx = 0; colIdx < width; colIdx++) {
+                if (shape[rowIdx][colIdx].getSymbol() == CellState.FILLED.getSymbol()) {
+                    this.grid[row + rowIdx][col + colIdx].setSymbol(CellState.FILLED.getSymbol());
+                    this.grid[row + rowIdx][col + colIdx].setColor(color);
                     blockMap.put(new Position(row + rowIdx, col + colIdx), block);
                 }
             }
@@ -104,7 +106,6 @@ public class Board {
             }
         }
 
-        // Remove all instances of this block from the board
         blockMap.entrySet().removeIf(entry -> entry.getValue() == block);
 
         return block;

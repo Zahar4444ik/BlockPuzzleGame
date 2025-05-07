@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import "../assets/css/HomePage.css";
 import { useAuth } from "../context/AuthContext";
 import { Star, Trophy, MessageSquare, Play } from "lucide-react";
+import { getComments, addComment } from '../services/CommentService';
+import { getAverageRating, setAndAddRating } from "../services/RatingService";
+import { getTopScores } from "../services/ScoreService";
 
 function HomePage() {
     const { authenticated } = useAuth();
@@ -14,29 +17,21 @@ function HomePage() {
     const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
-        // Fetch leaderboard (top 5 scores for Block Puzzle)
-        fetch("http://localhost:9090/api/score/Block Puzzle", { credentials: "include" })
-            .then((res) => res.json())
-            .then((data) => {
-                const top5 = data.slice(0, 5);
-                setLeaderboard(top5);
-            })
-            .catch(() => setLeaderboard([]));
+        const fetchInitialData = async () => {
+            // Fetch leaderboard (top 5 scores for Block Puzzle)
+            const topScores = await getTopScores("Block Puzzle");
+            setLeaderboard(topScores.slice(0, 5));
 
-        // Fetch average rating for Block Puzzle (visible to all)
-        fetch("http://localhost:9090/api/rating/Block Puzzle", { credentials: "include" })
-            .then((res) => res.json())
-            .then((data) => setAverageRating(data))
-            .catch(() => setAverageRating(0));
+            // Fetch average rating for Block Puzzle (visible to all)
+            const avgRating = await getAverageRating("Block Puzzle");
+            setAverageRating(avgRating);
 
-        // Fetch comments for Block Puzzle (visible to all)
-        fetch("http://localhost:9090/api/comment/Block Puzzle", { credentials: "include" })
-            .then((res) => res.json())
-            .then((data) => {
-                const last5 = data.slice(0, 5);
-                setComments(last5);
-            })
-            .catch(() => setComments([]));
+            // Fetch comments for Block Puzzle (visible to all)
+            const commentList = await getComments("Block Puzzle");
+            setComments(commentList.slice(0, 5));
+        };
+
+        fetchInitialData();
     }, []);
 
     const handleSubmit = async (e) => {
@@ -57,13 +52,7 @@ function HomePage() {
             ratedOn,
         };
         try {
-            const ratingRes = await fetch("http://localhost:9090/api/rating", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                body: JSON.stringify(ratingPayload),
-            });
-            if (!ratingRes.ok) throw new Error("Failed to submit rating");
+            await setAndAddRating(ratingPayload);
         } catch (err) {
             alert("Error submitting rating: " + err.message);
             return;
@@ -78,13 +67,7 @@ function HomePage() {
                 commentedOn: ratedOn,
             };
             try {
-                const commentRes = await fetch("http://localhost:9090/api/comment", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    credentials: "include",
-                    body: JSON.stringify(commentPayload),
-                });
-                if (!commentRes.ok) throw new Error("Failed to submit comment");
+                await addComment(commentPayload);
             } catch (err) {
                 alert("Error submitting comment: " + err.message);
                 return;
@@ -92,12 +75,10 @@ function HomePage() {
         }
 
         // Refresh rating and comments
-        fetch("http://localhost:9090/api/rating/Block Puzzle", { credentials: "include" })
-            .then((res) => res.json())
-            .then((data) => setAverageRating(data));
-        fetch("http://localhost:9090/api/comment/Block Puzzle", { credentials: "include" })
-            .then((res) => res.json())
-            .then((data) => setComments(data.slice(0, 5)));
+        const updatedAvgRating = await getAverageRating("Block Puzzle");
+        setAverageRating(updatedAvgRating);
+        const updatedComments = await getComments("Block Puzzle");
+        setComments(updatedComments.slice(0, 5));
         setShowForm(false);
         setRating(0);
         setComment("");
