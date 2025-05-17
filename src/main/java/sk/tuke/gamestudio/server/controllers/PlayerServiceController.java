@@ -1,4 +1,4 @@
-package sk.tuke.gamestudio.server.webservice;
+package sk.tuke.gamestudio.server.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import org.springframework.security.core.AuthenticationException;
 
 @RestController
 @RequestMapping("api/player")
-public class PlayerServiceRest {
+public class PlayerServiceController {
 
     @Autowired
     private PlayerService playerService;
@@ -73,11 +73,16 @@ public class PlayerServiceRest {
 
     @PutMapping("/update")
     public void updatePlayer(@RequestBody PlayerDTO playerDTO) {
-        Player player = new Player(playerDTO.getNickname(), playerDTO.getPassword());
-        player.setGamesPlayed(playerDTO.getGamesPlayed());
-        player.setLastPlayed(player.getLastPlayed());
-        player.setScore(playerDTO.getScore());
-        this.playerService.updatePlayer(player);
+        Player existingPlayer = playerService.getPlayer(playerDTO.getNickname());
+        if (existingPlayer == null) {
+            throw new IllegalArgumentException("Player not found: " + playerDTO.getNickname());
+        }
+
+        existingPlayer.setScore(playerDTO.getScore());
+        existingPlayer.setGamesPlayed(playerDTO.getGamesPlayed());
+        existingPlayer.setLastPlayed(playerDTO.getLastPlayed());
+
+        this.playerService.updatePlayer(existingPlayer);
     }
 
     @GetMapping("/current-nickname")

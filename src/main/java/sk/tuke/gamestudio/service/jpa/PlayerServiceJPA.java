@@ -5,7 +5,6 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import sk.tuke.gamestudio.entity.Player;
@@ -97,8 +96,6 @@ public class PlayerServiceJPA implements PlayerService {
     @Override
     public void updatePlayer(Player player) {
         if (!isNotValidPlayer(player)) {
-            String hashedPassword = passwordEncoder.encode(player.getPassword());
-            player.setPassword(hashedPassword);
             entityManager.merge(player);
         }
     }

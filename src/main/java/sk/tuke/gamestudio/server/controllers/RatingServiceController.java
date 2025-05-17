@@ -1,4 +1,4 @@
-package sk.tuke.gamestudio.server.webservice;
+package sk.tuke.gamestudio.server.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +10,7 @@ import sk.tuke.gamestudio.service.RatingService;
 
 @RestController
 @RequestMapping("api/rating")
-public class RatingServiceRest {
+public class RatingServiceController {
 
     @Autowired
     private RatingService ratingService;

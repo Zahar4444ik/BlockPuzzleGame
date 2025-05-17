@@ -21,7 +21,6 @@ const LevelPage = () => {
     // Save score when hasWon becomes true
     useEffect(() => {
         if (hasWon && !scoreSaved) {
-            console.log("Player has won, saving score...");
             saveScore();
             setScoreSaved(true);
         }
@@ -34,21 +33,17 @@ const LevelPage = () => {
     const getDisplayBlocks = (blocks) => {
         const leftBlocks = blocks.slice(0, 3); // First 3 blocks
         const rightBlocks = blocks.slice(3, 6); // Next 3 blocks
-        console.log("Left blocks:", leftBlocks.map(b => b.id));
-        console.log("Right blocks:", rightBlocks.map(b => b.id));
         return { leftBlocks, rightBlocks };
     };
 
     const handlePlayAgain = (refetch) => {
         setHasWon(false);
         setScoreSaved(false); // Reset scoreSaved for new game
-        refetch(); // Reset the game
-        console.log("Play Again triggered, resetting game");
+        refetch();
     };
 
     const handleExit = () => {
         navigate("/levels");
-        console.log("Navigated to /levels");
     };
 
     // Function to save score when won
@@ -69,7 +64,6 @@ const LevelPage = () => {
             return;
         }
 
-        // Calculate win bonus based on difficulty
         let winBonus = 0;
         switch (difficulty) {
             case "EASY":
@@ -92,7 +86,6 @@ const LevelPage = () => {
         // Update player with new score and incremented gamesPlayed
         const updatedPlayerDTO = {
             nickname: playerData.nickname,
-            password: playerData.password,
             score: newScore,
             gamesPlayed: (playerData.gamesPlayed || 0) + 1,
             lastPlayed: new Date().toISOString(),
@@ -100,7 +93,6 @@ const LevelPage = () => {
 
         try {
             await updatePlayer(updatedPlayerDTO);
-            console.log(`Updated player ${nickname} with new score: ${newScore}`);
         } catch (error) {
             console.error("Error updating player:", error);
             alert("Failed to update player score. Please try again.");
@@ -117,7 +109,6 @@ const LevelPage = () => {
 
         try {
             await addAndSetScore(scoreDTO);
-            console.log(`Score ${winBonus} saved for ${nickname}`);
             setStats({
                 score: newScore,
                 gamesPlayed: updatedPlayerDTO.gamesPlayed,
