@@ -30,7 +30,6 @@ public class GameService {
         board.setBlockMap(placedBlocks);
 
         // Process action
-        boolean stateChanged = false;
         int blockIndex = action.getBlockIndex();
         if (blockIndex >= 0 && blockIndex < availableBlocks.size()) {
             Block block = availableBlocks.get(blockIndex);
@@ -46,21 +45,11 @@ public class GameService {
             if (board.canPlaceBlock(block, adjustedRow, adjustedCol)) {
                 board.placeBlock(block, adjustedRow, adjustedCol);
                 availableBlocks.remove(blockIndex);
-                stateChanged = true;
             }
         }
 
-        // Check win condition
-        boolean hasWon = board.isFull();
-
         // Convert back to DTO
-        return new GameStateDTO(
-                convertToCellArrayDTO(board.getGrid()),
-                convertToBlockListDTO(availableBlocks),
-                convertToPlacedBlocksDTO(board.getBlockMap()),
-                0, // Score can be implemented later
-                hasWon
-        );
+        return convertToGameStateDTO(board, availableBlocks);
     }
 
     public GameStateDTO convertToGameStateDTO(Board board, List<Block> availableBlocks) {
@@ -68,7 +57,6 @@ public class GameService {
                 convertToCellArrayDTO(board.getGrid()),
                 convertToBlockListDTO(availableBlocks),
                 convertToPlacedBlocksDTO(board.getBlockMap()),
-                0,
                 board.isFull()
         );
     }
