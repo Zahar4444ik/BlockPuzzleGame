@@ -9,36 +9,33 @@ import sk.tuke.gamestudio.game.BlockPuzzle.consoleui.ConsoleColor;
 @Setter
 @Getter
 public class Cell {
+    private CellState state;
     private char symbol;
     private ConsoleColor color;
 
-    public Cell(char symbol, ConsoleColor color) {
-        this.symbol = symbol;
+    public Cell(CellState state, ConsoleColor color) {
+        this.state = state;
+        this.symbol = state.getSymbol();
         this.color = color;
     }
 
     public Cell(ConsoleColor color) {
+        this.state = CellState.FILLED;
         this.symbol = CellState.FILLED.getSymbol();
         this.color = color;
     }
 
     public static Cell createEmptyBlockCell() {
-        return new Cell(CellState.EMPTY_BLOCK.getSymbol(), ConsoleColor.RESET);
+        return new Cell(CellState.EMPTY_BLOCK, ConsoleColor.RESET);
     }
 
     public static Cell createEmptyBoardCell() {
-        return new Cell(CellState.EMPTY_BOARD.getSymbol(), ConsoleColor.RESET);
+        return new Cell(CellState.EMPTY_BOARD, ConsoleColor.RESET);
     }
 
     @JsonProperty("state")
     public String getState() {
-        if (symbol == CellState.FILLED.getSymbol()) {
-            return "FILLED";
-        } else if (symbol == CellState.EMPTY_BLOCK.getSymbol()) {
-            return "EMPTY_BLOCK";
-        } else {
-            return "EMPTY_BOARD";
-        }
+        return this.state.name();
     }
 
     @JsonProperty("color")
@@ -48,6 +45,6 @@ public class Cell {
 
     @JsonIgnore
     public void printCell() {
-        System.out.print(this.color.toString() + this.symbol + ConsoleColor.RESET + " ");
+        System.out.print(this.color.toString() + this.state.getSymbol() + ConsoleColor.RESET + " ");
     }
 }

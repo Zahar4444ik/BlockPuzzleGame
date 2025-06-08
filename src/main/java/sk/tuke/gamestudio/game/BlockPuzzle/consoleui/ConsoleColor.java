@@ -29,4 +29,15 @@ public enum ConsoleColor {
     public String toString() {
         return code;
     }
+
+    public static ConsoleColor fromRgb(int[] rgb) {
+        if (rgb == null || rgb.length != 3) return RESET;
+        for (ConsoleColor color : ConsoleColor.values()) {
+            if (color != BOLD && color != UNDERLINE && // Exclude style modifiers
+                    rgb[0] == color.rgb[0] && rgb[1] == color.rgb[1] && rgb[2] == color.rgb[2]) {
+                return color;
+            }
+        }
+        return RESET; // Default to RESET if no match
+    }
 }

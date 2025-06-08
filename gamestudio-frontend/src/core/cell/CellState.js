@@ -1,5 +1,6 @@
 const CellState = {
-    EMPTY: 'EMPTY',
+    EMPTY_BOARD: 'EMPTY_BOARD',
+    EMPTY_BLOCK: 'EMPTY_BLOCK',
     FILLED: 'FILLED',
 };
 

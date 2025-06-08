@@ -1,6 +1,5 @@
 package sk.tuke.gamestudio.entity;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,5 +40,4 @@ public class Comment implements Serializable {
         this.comment = comment;
         this.commentedOn = commentedOn;
     }
-
 }

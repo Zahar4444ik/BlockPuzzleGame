@@ -8,6 +8,7 @@ import { addAndSetScore } from "../services/ScoreService";
 import { getCurrentNickname, getPlayerData, updatePlayer } from "../services/PlayerService";
 import {usePlayerStats} from "../context/PlayerStatsContext";
 
+
 const LevelPage = () => {
     const { search } = useLocation();
     const [scoreSaved, setScoreSaved] = useState(false);

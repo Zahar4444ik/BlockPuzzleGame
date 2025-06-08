@@ -1,8 +1,9 @@
 import CellState from "../core/cell/CellState";
+import { updateGameState } from "../services/GameService";
 
-const handleDragStart = (e, blockId, blocks) => {
-    const blockIndex = blocks.findIndex(b => b.id === blockId);
-    const block = blocks[blockIndex].block;
+const handleDragStart = (e, blockId, availableBlocks) => {
+    const blockIndex = availableBlocks.findIndex(b => b.id === blockId);
+    const block = availableBlocks[blockIndex].block;
     const shape = block.getShape();
     const cellSize = 50;
     const blockRect = e.currentTarget.getBoundingClientRect();
@@ -46,34 +47,19 @@ const handleDragStart = (e, blockId, blocks) => {
 const handleDragOver = (e, rowIndex, colIndex, board, blocks, hasWon) => {
     if (hasWon) return;
     e.preventDefault();
-    const dragData = e.dataTransfer.getData("text/plain");
-    const [blockIndexStr, offsetRowStr, offsetColStr] = dragData.split(":");
-    const blockIndex = parseInt(blockIndexStr, 10);
-    const offsetRow = parseInt(offsetRowStr, 10);
-    const offsetCol = parseInt(offsetColStr, 10);
-
-
-    if (isNaN(blockIndex) || blockIndex < 0 || blockIndex >= blocks.length || isNaN(offsetRow) || isNaN(offsetCol)) {
-        console.error("Invalid drag data:", { blockIndex, offsetRow, offsetCol });
-        return;
-    }
-
-    const block = blocks[blockIndex].block;
-    const isValid = board.canPlaceBlock(block, rowIndex, colIndex, offsetRow, offsetCol);
-    console.log(`Drag over (${rowIndex}, ${colIndex}), valid: ${isValid}`);
 };
 
-const handleDrop = ({
-                        e,
-                        rowIndex,
-                        colIndex,
-                        board,
-                        blocks,
-                        setBoard,
-                        setAvailableBlocks,
-                        hasWon,
-                        setHasWon
-                    }) => {
+const handleDrop = async ({
+                              e,
+                              rowIndex,
+                              colIndex,
+                              board,
+                              blocks,
+                              setBoard,
+                              setAvailableBlocks,
+                              hasWon,
+                              setHasWon
+                          }) => {
     if (hasWon) return false;
     e.preventDefault();
     const dragData = e.dataTransfer.getData("text/plain");
@@ -86,20 +72,41 @@ const handleDrop = ({
         return false;
     }
 
-    const block = blocks[blockIndex].block;
+    try {
+        const currentState = {
+            grid: board.getGrid(),
+            availableBlocks: blocks,
+            placedBlocks: new Map(),
+            score: 0,
+            hasWon: hasWon
+        };
 
-    const isValid = board.canPlaceBlock(block, rowIndex, colIndex, offsetRow, offsetCol);
-    if (isValid) {
-        board.placeBlock(block, rowIndex, colIndex, offsetRow, offsetCol);
-        setBoard(board); // Update the board state in GameDataReceiver
-        setAvailableBlocks(prevBlocks => prevBlocks.filter((_, idx) => idx !== blockIndex));
+        const action = {
+            row: rowIndex,
+            col: colIndex,
+            blockIndex: blockIndex,
+            offsetRow: offsetRow,
+            offsetCol: offsetCol
+        };
 
-        if (board.isFull()) {
-            setHasWon(true);
+        console.log("Sending request:", { currentState, action });
+
+        const updatedState = await updateGameState(currentState, action);
+        if (updatedState.availableBlocks.length === currentState.availableBlocks.length) {
+            alert("Invalid placement. Try another position.");
+            return false;
         }
-        return true; // Indicate successful placement
-    } else {
-        return false; // Indicate failed placement
+
+        console.log("Received updated state:", updatedState);
+
+        setBoard(updatedState.board);
+        setAvailableBlocks(updatedState.availableBlocks);
+        setHasWon(updatedState.hasWon);
+        return true;
+    } catch (error) {
+        console.error("Error placing block:", error);
+        alert("Failed to place block. Please try again.");
+        return false;
     }
 };
 

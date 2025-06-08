@@ -1,24 +1,28 @@
 package sk.tuke.gamestudio.server.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import sk.tuke.gamestudio.DTO.game.*;
+import sk.tuke.gamestudio.game.BlockPuzzle.core.board.Block;
+import sk.tuke.gamestudio.game.BlockPuzzle.core.board.Board;
+import sk.tuke.gamestudio.game.BlockPuzzle.core.board.Cell;
 import sk.tuke.gamestudio.game.BlockPuzzle.levels.GameLevels;
 import sk.tuke.gamestudio.game.BlockPuzzle.levels.Level;
 import sk.tuke.gamestudio.game.BlockPuzzle.levels.LevelFactory;
+import sk.tuke.gamestudio.service.jpa.GameService;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Controller
 @RequestMapping("api/game")
 public class BlockPuzzleController {
+    @Autowired
+    private GameService gameService;
+
     @GetMapping("/data")
     @ResponseBody
-    public Map<String, Object> getGameData(@RequestParam(value = "difficulty", defaultValue = "EASY") String difficulty) {
+    public GameStateDTO getGameData(@RequestParam(value = "difficulty", defaultValue = "EASY") String difficulty) {
         GameLevels levelDifficulty;
         try {
             levelDifficulty = GameLevels.valueOf(difficulty.toUpperCase());
@@ -31,13 +35,18 @@ public class BlockPuzzleController {
             level = LevelFactory.createLevel(GameLevels.EASY);
         }
 
-        Map<String, Object> gameState = new HashMap<>();
         if (level == null) {
-            gameState.put("error", "Failed to create level");
-            return gameState;
+            throw new IllegalStateException("Level not found for difficulty: " + difficulty);
         }
-        gameState.put("board", level.generateBoard());
-        gameState.put("blocks", level.generateBlocks());
-        return gameState;
+        Board board = level.generateBoard();
+        List<Block> blocks = level.generateBlocks();
+
+        return gameService.convertToGameStateDTO(board, blocks);
+    }
+
+    @PostMapping("/update")
+    @ResponseBody
+    public GameStateDTO updateGame(@RequestBody GameUpdateRequestDTO request){
+        return gameService.updateGameState(request);
     }
 }

@@ -1,4 +1,4 @@
-const colors = {
+const Colors = {
     RED: [255, 0, 127],    // Neon Pink
     BLUE: [0, 191, 255],   // Neon Blue
     GREEN: [57, 255, 20],  // Neon Green
@@ -11,4 +11,4 @@ const colors = {
     INDIGO: [75, 0, 130],  // Neon Indigo
 };
 
-export default colors;
+export default Colors;

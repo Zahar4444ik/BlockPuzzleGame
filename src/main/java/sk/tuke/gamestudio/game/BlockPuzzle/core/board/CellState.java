@@ -14,4 +14,12 @@ public enum CellState {
         this.symbol = symbol;
     }
 
+    public static CellState fromSymbol(char symbol) {
+        for (CellState state : CellState.values()) {
+            if (state.symbol == symbol) {
+                return state;
+            }
+        }
+        throw new IllegalArgumentException("Unknown cell state symbol: " + symbol);
+    }
 }

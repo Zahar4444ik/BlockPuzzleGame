@@ -1,10 +1,11 @@
 package sk.tuke.gamestudio.game.BlockPuzzle.core;
 
+import lombok.Data;
 import lombok.Getter;
 
 import java.util.Objects;
 
-@Getter
+@Data
 public class Position {
     private final int row;
     private final int col;

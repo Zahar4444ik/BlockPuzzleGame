@@ -40,9 +40,9 @@ const GameDataReceiver = ({ difficulty, onDataReceived, children }) => {
             }
             const data = await response.json();
 
-            const boardData = data.board;
-            const newBoard = new Board(boardData.rows, boardData.cols);
-            newBoard.grid = boardData.grid.map(row =>
+            console.log("Fetched board data:", data);
+            const newBoard = new Board(data.grid.length, data.grid[0].length);
+            newBoard.grid = data.grid.map(row =>
                 row.map(cell => {
                     let cellState;
                     switch (cell.state) {
@@ -50,14 +50,14 @@ const GameDataReceiver = ({ difficulty, onDataReceived, children }) => {
                             cellState = CellState.FILLED;
                             break;
                         default:
-                            cellState = CellState.EMPTY;
+                            cellState = CellState.EMPTY_BOARD;
                             break;
                     }
                     return new Cell(cellState, cell.color);
                 })
             );
 
-            const blocks = data.blocks.map((blockData, index) => {
+            const blocks = data.availableBlocks.map((blockData, index) => {
                 const shape = blockData.shape.map(row =>
                     row.map(cell => {
                         let cellState;
@@ -66,7 +66,7 @@ const GameDataReceiver = ({ difficulty, onDataReceived, children }) => {
                                 cellState = CellState.FILLED;
                                 break;
                             default:
-                                cellState = CellState.EMPTY;
+                                cellState = CellState.EMPTY_BLOCK;
                                 break;
                         }
                         return new Cell(cellState, cell.color);

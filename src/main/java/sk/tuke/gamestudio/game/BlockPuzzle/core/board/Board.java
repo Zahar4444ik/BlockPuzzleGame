@@ -1,22 +1,21 @@
 package sk.tuke.gamestudio.game.BlockPuzzle.core.board;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
+import lombok.Data;
 import sk.tuke.gamestudio.game.BlockPuzzle.consoleui.ConsoleColor;
 import sk.tuke.gamestudio.game.BlockPuzzle.core.Position;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
+@Data
 public class Board {
-    @Getter
     private final int rows;
-    @Getter
     private final int cols;
-    @Getter
-    private final Cell[][] grid;
+    private Cell[][] grid;
     @JsonIgnore
-    private final Map<Position, Block> blockMap;
+    private Map<Position, Block> blockMap;
 
     public Board(int rows, int cols) {
         this.rows = rows;
@@ -68,7 +67,7 @@ public class Board {
         for (int rowIdx = 0; rowIdx < height; rowIdx++) {
             for (int colIdx = 0; colIdx < width; colIdx++) {
                 if (shape[rowIdx][colIdx].getSymbol() == CellState.FILLED.getSymbol()) {
-                    this.grid[row + rowIdx][col + colIdx].setSymbol(CellState.FILLED.getSymbol());
+                    this.grid[row + rowIdx][col + colIdx].setState(CellState.FILLED);
                     this.grid[row + rowIdx][col + colIdx].setColor(color);
                     blockMap.put(new Position(row + rowIdx, col + colIdx), block);
                 }
@@ -80,7 +79,7 @@ public class Board {
     public boolean isFull() {
         for (Cell[] row : this.grid) {
             for (Cell cell : row) {
-                if (cell.getSymbol() == CellState.EMPTY_BOARD.getSymbol()) {
+                if (Objects.equals(cell.getState(), CellState.EMPTY_BOARD.toString())) {
                     return false;
                 }
             }
