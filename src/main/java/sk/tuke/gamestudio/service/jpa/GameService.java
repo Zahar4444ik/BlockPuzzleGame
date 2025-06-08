@@ -3,7 +3,6 @@ package sk.tuke.gamestudio.service.jpa;
 import org.springframework.stereotype.Service;
 import sk.tuke.gamestudio.DTO.game.*;
 import sk.tuke.gamestudio.game.BlockPuzzle.consoleui.ConsoleColor;
-import sk.tuke.gamestudio.game.BlockPuzzle.consoleui.GamePrinter;
 import sk.tuke.gamestudio.game.BlockPuzzle.core.Position;
 import sk.tuke.gamestudio.game.BlockPuzzle.core.board.Block;
 import sk.tuke.gamestudio.game.BlockPuzzle.core.board.Board;
