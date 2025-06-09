@@ -77,7 +77,6 @@ const handleDrop = async ({
             grid: board.getGrid(),
             availableBlocks: blocks,
             placedBlocks: new Map(),
-            score: 0,
             hasWon: hasWon
         };
 

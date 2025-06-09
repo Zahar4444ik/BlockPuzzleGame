@@ -35,7 +35,6 @@ export const updateGameState = async (currentState, action) => {
                         };
                         return map;
                     }, {}),
-                    score: currentState.score,
                     hasWon: currentState.hasWon
                 },
                 move: {
@@ -89,7 +88,7 @@ export const updateGameState = async (currentState, action) => {
                 id: `block-${index}`
             })),
             placedBlocks: newPlacedBlocks,
-            score: updatedState.score,
+
             hasWon: updatedState.hasWon
         };
     } catch (error) {
