@@ -7,6 +7,19 @@ const API_BASE_URL = 'http://localhost:9090/api/game';
 
 export const updateGameState = async (currentState, action) => {
     try {
+        const move = action.move || "PLACE"; // Default to PLACE if not specified
+        const movePayload = {
+            move,
+            row: action.row,
+            col: action.col
+        };
+
+        if (move === "PLACE") {
+            movePayload.blockIndex = action.blockIndex;
+            movePayload.offsetRow = action.offsetRow;
+            movePayload.offsetCol = action.offsetCol;
+        }
+
         const response = await fetch(`${API_BASE_URL}/update`, {
             method: "POST",
             headers: {
@@ -35,16 +48,9 @@ export const updateGameState = async (currentState, action) => {
                         };
                         return map;
                     }, {}),
-                    score: currentState.score,
                     hasWon: currentState.hasWon
                 },
-                move: {
-                    row: action.row,
-                    col: action.col,
-                    blockIndex: action.blockIndex,
-                    offsetRow: action.offsetRow,
-                    offsetCol: action.offsetCol
-                }
+                move: movePayload
             }),
             credentials: "include",
         });
@@ -65,18 +71,19 @@ export const updateGameState = async (currentState, action) => {
                 row.map(cell => new Cell(cell.state, cell.color))
             )
         );
-
-        const newPlacedBlocks = new Map(
-            Object.entries(updatedState.placedBlocks || []).map(([key, block]) => {
-                const [row, col] = key.split(",");
-                return [
-                    new Position(parseInt(row), parseInt(col)),
-                    new Block(
-                        block.shape.map(row => row.map(cell => new Cell(cell.state, cell.color))),
-                        block.color
-                    )
-                ];
-            })
+        newBoard.setPlacedBlocks(
+            new Map(
+                Object.entries(updatedState.placedBlocks || {}).map(([key, block]) => {
+                    const [row, col] = key.split(",");
+                    return [
+                        new Position(parseInt(row), parseInt(col)),
+                        new Block(
+                            block.shape.map(row => row.map(cell => new Cell(cell.state, cell.color))),
+                            block.color
+                        )
+                    ];
+                })
+            )
         );
 
         return {
@@ -88,8 +95,7 @@ export const updateGameState = async (currentState, action) => {
                 ),
                 id: `block-${index}`
             })),
-            placedBlocks: newPlacedBlocks,
-            score: updatedState.score,
+            placedBlocks: newBoard.getPlacedBlocks(),
             hasWon: updatedState.hasWon
         };
     } catch (error) {

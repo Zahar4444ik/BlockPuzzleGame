@@ -12,7 +12,6 @@ public class GameStateDTO {
     private CellDTO[][] grid;
     private List<BlockDTO> availableBlocks;
     private Map<String, BlockDTO> placedBlocks;
-    private int score;
     private boolean hasWon;
 }
 

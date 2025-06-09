@@ -98,8 +98,9 @@ public class Board {
 
         for (int rowIdx = 0; rowIdx < this.rows; rowIdx++) {
             for (int colIdx = 0; colIdx < this.cols; colIdx++) {
-                if (grid[rowIdx][colIdx].getSymbol() == CellState.FILLED.getSymbol() && blockMap.get(new Position(rowIdx, colIdx)) == block) {
-                    grid[rowIdx][colIdx].setSymbol(CellState.EMPTY_BOARD.getSymbol());
+                if (Objects.equals(grid[rowIdx][colIdx].getState(), CellState.FILLED.toString())
+                && block.getShape()[rowIdx - row][colIdx - col].getSymbol() == CellState.FILLED.getSymbol()) {
+                    grid[rowIdx][colIdx].setState(CellState.EMPTY_BOARD);
                     grid[rowIdx][colIdx].setColor(ConsoleColor.RESET);
                 }
             }

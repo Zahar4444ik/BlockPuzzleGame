@@ -6,6 +6,7 @@ class Board {
         this.rows = rows;
         this.cols = cols;
         this.grid = Array(rows).fill().map(() => Array(cols).fill(new Cell(CellState.EMPTY, [0, 0, 0])));
+        this.placedBlocks = new Map();
     }
 
     getRows() {
@@ -22,6 +23,14 @@ class Board {
 
     setGrid(grid) {
         this.grid = grid;
+    }
+
+    getPlacedBlocks() {
+        return this.placedBlocks;
+    }
+
+    setPlacedBlocks(placedBlocks) {
+        this.placedBlocks = placedBlocks;
     }
 }
 

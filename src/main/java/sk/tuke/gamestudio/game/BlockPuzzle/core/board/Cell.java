@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import sk.tuke.gamestudio.game.BlockPuzzle.consoleui.ConsoleColor;
 
+import java.util.Objects;
+
 @Setter
 @Getter
 public class Cell {
@@ -46,5 +48,20 @@ public class Cell {
     @JsonIgnore
     public void printCell() {
         System.out.print(this.color.toString() + this.state.getSymbol() + ConsoleColor.RESET + " ");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Cell cell)) return false;
+
+        return state == cell.state &&
+                symbol == cell.symbol &&
+                Objects.equals(color, cell.color);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(state, symbol, color);
     }
 }

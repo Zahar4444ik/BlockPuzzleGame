@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "../assets/css/AnyLevelPage.css";
 import GameDataReceiver from "../components/GameDataReceiver";
 import CellState from "../core/cell/CellState";
-import { handleDragStart, handleDragOver, handleDrop } from "../components/DragDropHandler";
+import {handleDragStart, handleDragOver, handleDrop, handleRemoveBlock} from "../components/DragDropHandler";
 import { addAndSetScore } from "../services/ScoreService";
 import { getCurrentNickname, getPlayerData, updatePlayer } from "../services/PlayerService";
 import {usePlayerStats} from "../context/PlayerStatsContext";
@@ -123,7 +123,7 @@ const LevelPage = () => {
     return (
         <GameDataReceiver difficulty={difficulty} onDataReceived={handleDataReceived}>
             {({ board, availableBlocks, setBoard, setAvailableBlocks, refetch }) => {
-                console.log("Rendering board state in LevelPage:", board.getGrid());
+                // console.log("Rendering board state in LevelPage:", board.getGrid());
                 const { leftBlocks, rightBlocks } = getDisplayBlocks(availableBlocks);
 
                 return (
@@ -205,6 +205,19 @@ const LevelPage = () => {
                                                 hasWon,
                                                 setHasWon,
                                             })}
+                                            onContextMenu={(e) => {
+                                                e.preventDefault();
+                                                handleRemoveBlock({
+                                                    rowIndex,
+                                                    colIndex,
+                                                    board,
+                                                    blocks: availableBlocks,
+                                                    setBoard,
+                                                    setAvailableBlocks,
+                                                    hasWon,
+                                                    setHasWon,
+                                                });
+                                            }}
                                             style={{
                                                 backgroundColor:
                                                     cell.getState() === CellState.FILLED && cell.getColor()
