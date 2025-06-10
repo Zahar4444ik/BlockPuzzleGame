@@ -44,8 +44,8 @@ public class Board {
 
         for (int rowIdx = 0; rowIdx < height; rowIdx++) {
             for (int colIdx = 0; colIdx < width; colIdx++) {
-                if (shape[rowIdx][colIdx].getSymbol() == CellState.FILLED.getSymbol() &&
-                        this.grid[row + rowIdx][col + colIdx].getSymbol() != CellState.EMPTY_BOARD.getSymbol()) {
+                if (Objects.equals(shape[rowIdx][colIdx].getState(), CellState.FILLED.toString()) &&
+                        !Objects.equals(this.grid[row + rowIdx][col + colIdx].getState(), CellState.EMPTY_BOARD.toString())) {
                     return false; // Block is colliding with another block
                 }
             }
@@ -98,8 +98,8 @@ public class Board {
 
         for (int rowIdx = 0; rowIdx < this.rows; rowIdx++) {
             for (int colIdx = 0; colIdx < this.cols; colIdx++) {
-                if (grid[rowIdx][colIdx].getSymbol() == CellState.FILLED.getSymbol() && blockMap.get(new Position(rowIdx, colIdx)) == block) {
-                    grid[rowIdx][colIdx].setSymbol(CellState.EMPTY_BOARD.getSymbol());
+                if (Objects.equals(grid[rowIdx][colIdx].getState(), CellState.FILLED.toString()) && block.equals(blockMap.get(new Position(rowIdx, colIdx)))) {
+                    grid[rowIdx][colIdx].setState(CellState.EMPTY_BOARD);
                     grid[rowIdx][colIdx].setColor(ConsoleColor.RESET);
                 }
             }
