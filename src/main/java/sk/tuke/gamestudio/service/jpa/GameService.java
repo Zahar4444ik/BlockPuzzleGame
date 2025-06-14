@@ -12,6 +12,7 @@ import sk.tuke.gamestudio.game.BlockPuzzle.core.board.CellState;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,22 +29,25 @@ public class GameService {
         board.setGrid(grid);
         board.setBlockMap(placedBlocks);
 
-        // Process action
-        int blockIndex = action.getBlockIndex();
-        if (blockIndex >= 0 && blockIndex < availableBlocks.size()) {
-            Block block = availableBlocks.get(blockIndex);
-            int row = action.getRow();
-            int col = action.getCol();
-            int offsetRow = action.getOffsetRow();
-            int offsetCol = action.getOffsetCol();
+        String move = action.getMove();
 
-            // Adjust starting position based on offset to match the top-left of the block shape
-            int adjustedRow = row - offsetRow;
-            int adjustedCol = col - offsetCol;
+        if (Objects.equals(move, "PLACE")) {
+            int blockIndex = action.getBlockIndex();
+            if (blockIndex >= 0 && blockIndex < availableBlocks.size()) {
+                Block block = availableBlocks.get(blockIndex);
+                int row = action.getRow();
+                int col = action.getCol();
+                int offsetRow = action.getOffsetRow();
+                int offsetCol = action.getOffsetCol();
 
-            if (board.canPlaceBlock(block, adjustedRow, adjustedCol)) {
-                board.placeBlock(block, adjustedRow, adjustedCol);
-                availableBlocks.remove(blockIndex);
+                // Adjust starting position based on offset to match the top-left of the block shape
+                int adjustedRow = row - offsetRow;
+                int adjustedCol = col - offsetCol;
+
+                if (board.canPlaceBlock(block, adjustedRow, adjustedCol)) {
+                    board.placeBlock(block, adjustedRow, adjustedCol);
+                    availableBlocks.remove(blockIndex);
+                }
             }
         }
 

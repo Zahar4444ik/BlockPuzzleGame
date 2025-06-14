@@ -76,11 +76,12 @@ const handleDrop = async ({
         const currentState = {
             grid: board.getGrid(),
             availableBlocks: blocks,
-            placedBlocks: new Map(),
+            placedBlocks: board.getBlockMap(),
             hasWon: hasWon
         };
 
         const action = {
+            move: "PLACE",
             row: rowIndex,
             col: colIndex,
             blockIndex: blockIndex,

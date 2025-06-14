@@ -6,6 +6,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class GameMoveDTO {
+    private String move;
     private Integer row;
     private Integer col;
     private Integer blockIndex;

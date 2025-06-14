@@ -2,11 +2,14 @@ import Cell from "../core/cell/Cell";
 import Block from "../core/Block";
 import Position from "../core/Position";
 import Board from "../core/Board";
+import board from "../core/Board";
 
 const API_BASE_URL = 'http://localhost:9090/api/game';
 
 export const updateGameState = async (currentState, action) => {
     try {
+        const move = action.move || "PLACE";
+
         const response = await fetch(`${API_BASE_URL}/update`, {
             method: "POST",
             headers: {
@@ -38,6 +41,7 @@ export const updateGameState = async (currentState, action) => {
                     hasWon: currentState.hasWon
                 },
                 move: {
+                    move: move,
                     row: action.row,
                     col: action.col,
                     blockIndex: action.blockIndex,
@@ -77,6 +81,7 @@ export const updateGameState = async (currentState, action) => {
                 ];
             })
         );
+        newBoard.setBlockMap(newPlacedBlocks);
 
         return {
             board: newBoard,
@@ -87,7 +92,7 @@ export const updateGameState = async (currentState, action) => {
                 ),
                 id: `block-${index}`
             })),
-            placedBlocks: newPlacedBlocks,
+            placedBlocks: newBoard.getBlockMap(),
 
             hasWon: updatedState.hasWon
         };
