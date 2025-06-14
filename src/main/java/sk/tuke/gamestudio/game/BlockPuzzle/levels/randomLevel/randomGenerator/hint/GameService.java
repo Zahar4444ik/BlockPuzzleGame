@@ -1,4 +1,4 @@
-package sk.tuke.gamestudio.service.jpa;
+package sk.tuke.gamestudio.game.BlockPuzzle.levels.randomLevel.randomGenerator.hint;
 
 import org.springframework.stereotype.Service;
 import sk.tuke.gamestudio.DTO.game.*;
@@ -49,6 +49,27 @@ public class GameService {
 
         // Convert back to DTO
         return convertToGameStateDTO(board, availableBlocks);
+    }
+
+    public HintDTO getHint(GameStateDTO currentState) {
+        Cell[][] grid = convertToCellArray(currentState.getGrid());
+        List<Block> availableBlocks = convertToBlockList(currentState.getAvailableBlocks());
+        Map<Position, Block> placedBlocks = convertToPositionBlockMap(currentState.getPlacedBlocks());
+        Board board = new Board(grid.length, grid[0].length);
+        board.setGrid(grid);
+        board.setBlockMap(placedBlocks);
+
+        if (!availableBlocks.isEmpty()) {
+            Block block = availableBlocks.getFirst();
+            for (int row = 0; row < board.getRows(); row++) {
+                for (int col = 0; col < board.getCols(); col++) {
+                    if (board.canPlaceBlock(block, row, col)) {
+                        return new HintDTO(0, row, col);
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public GameStateDTO convertToGameStateDTO(Board board, List<Block> availableBlocks) {

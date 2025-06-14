@@ -1,4 +1,4 @@
-package sk.tuke.gamestudio.DTO.game;
+package sk.tuke.gamestudio.game.BlockPuzzle.levels.randomLevel.randomGenerator.remove;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,6 +6,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class GameMoveDTO {
+    private String move;
     private Integer row;
     private Integer col;
     private Integer blockIndex;

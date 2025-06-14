@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "../assets/css/AnyLevelPage.css";
 import GameDataReceiver from "../components/GameDataReceiver";
 import CellState from "../core/cell/CellState";
-import {handleDragStart, handleDragOver, handleDrop, handleUndo} from "../components/DragDropHandler";
+import { handleDragStart, handleDragOver, handleDrop } from "../components/DragDropHandler";
 import { addAndSetScore } from "../services/ScoreService";
 import { getCurrentNickname, getPlayerData, updatePlayer } from "../services/PlayerService";
 import {usePlayerStats} from "../context/PlayerStatsContext";

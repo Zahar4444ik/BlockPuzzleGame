@@ -5,8 +5,7 @@ class Board {
     constructor(rows, cols) {
         this.rows = rows;
         this.cols = cols;
-        this.grid = Array(rows).fill().map(() => Array(cols).fill(new Cell(CellState.EMPTY_BOARD, [0, 0, 0])));
-        this.blockMap = new Map();
+        this.grid = Array(rows).fill().map(() => Array(cols).fill(new Cell(CellState.EMPTY, [0, 0, 0])));
     }
 
     getRows() {
@@ -23,14 +22,6 @@ class Board {
 
     setGrid(grid) {
         this.grid = grid;
-    }
-
-    getBlockMap(){
-        return this.blockMap;
-    }
-
-    setBlockMap(blockMap){
-        this.blockMap = blockMap;
     }
 }
 
