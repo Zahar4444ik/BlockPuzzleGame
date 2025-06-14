@@ -28,30 +28,31 @@ public class Block {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Block block)) return false;
-        if (shape.length != block.shape.length || shape[0].length != block.shape[0].length) return false;
-
-        for (int i = 0; i < shape.length; i++) {
-            for (int j = 0; j < shape[i].length; j++) {
-                if (!shape[i][j].equals(block.shape[i][j])) {
-                    return false;
-                }
-            }
-        }
-        return color == block.color;
-    }
-
-    @Override
     public int hashCode() {
-        int result = 1;
+        int result = color != null ? color.hashCode() : 0;
         for (Cell[] row : shape) {
             for (Cell cell : row) {
                 result = 31 * result + (cell != null ? cell.hashCode() : 0);
             }
         }
-        result = 31 * result + (color != null ? color.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Block block)) return false;
+
+        if (getWidth() != block.getWidth() || getHeight() != block.getHeight()) return false;
+        if (color != block.color) return false; // ok if ConsoleColor is enum
+
+        // Compare shape contents
+        for (int i = 0; i < shape.length; i++) {
+            for (int j = 0; j < shape[i].length; j++) {
+                if (!shape[i][j].equals(block.shape[i][j])) return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -76,11 +76,12 @@ const handleDrop = async ({
         const currentState = {
             grid: board.getGrid(),
             availableBlocks: blocks,
-            placedBlocks: new Map(),
+            placedBlocks: board.getPlacedBlocks(),
             hasWon: hasWon
         };
 
         const action = {
+            move: "PLACE",
             row: rowIndex,
             col: colIndex,
             blockIndex: blockIndex,
@@ -109,4 +110,58 @@ const handleDrop = async ({
     }
 };
 
-export { handleDragStart, handleDragOver, handleDrop };
+const handleRemoveBlock = async ({
+                                     rowIndex,
+                                     colIndex,
+                                     board,
+                                     blocks,
+                                     setBoard,
+                                     setAvailableBlocks,
+                                     hasWon,
+                                     setHasWon
+                                 }) => {
+    if (hasWon) return false;
+
+    try {
+        const grid = board.getGrid();
+        if (!grid || grid.some(row => row.some(cell => !cell || !cell.getState()))) {
+            console.error("Invalid grid state:", grid);
+            alert("Cannot remove block due to invalid board state.");
+            return false;
+        }
+
+        // Check if the cell is part of a placed block
+        if (grid[rowIndex][colIndex].getState() !== CellState.FILLED) {
+            console.log("No block to remove at:", rowIndex, colIndex);
+            return false;
+        }
+
+        const currentState = {
+            grid: grid,
+            availableBlocks: blocks,
+            placedBlocks: board.getPlacedBlocks(),
+            score: 0,
+            hasWon: hasWon
+        };
+
+        const action = {
+            move: "REMOVE",
+            row: rowIndex,
+            col: colIndex
+        };
+
+        console.log("Sending remove request:", { currentState, action });
+
+        const updatedState = await updateGameState(currentState, action);
+        setBoard(updatedState.board);
+        setAvailableBlocks(updatedState.availableBlocks);
+        setHasWon(updatedState.hasWon);
+        return true;
+    } catch (error) {
+        console.error("Error removing block:", error);
+        alert(`Failed to remove block: ${error.message}`);
+        return false;
+    }
+};
+
+export { handleDragStart, handleDragOver, handleDrop, handleRemoveBlock };

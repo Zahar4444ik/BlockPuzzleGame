@@ -54,9 +54,10 @@ public class Cell {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Cell cell)) return false;
-        return state == cell.state
-                && symbol == cell.symbol
-                && Objects.equals(color, cell.color);
+
+        return state == cell.state &&
+                symbol == cell.symbol &&
+                Objects.equals(color, cell.color);
     }
 
     @Override

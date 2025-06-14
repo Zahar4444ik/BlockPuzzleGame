@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Board from "../core/Board";
 import Cell from "../core/cell/Cell";
 import CellState from "../core/cell/CellState";
+import Position from "../core/Position";
 
 class Block {
     constructor(shape, color) {
@@ -55,6 +56,20 @@ const GameDataReceiver = ({ difficulty, onDataReceived, children }) => {
                     }
                     return new Cell(cellState, cell.color);
                 })
+            );
+            newBoard.setPlacedBlocks(
+                new Map(
+                    Object.entries(data.placedBlocks || {}).map(([key, block]) => {
+                        const [row, col] = key.split(",");
+                        return [
+                            new Position(parseInt(row), parseInt(col)),
+                            new Block(
+                                block.shape.map(row => row.map(cell => new Cell(cell.state, cell.color))),
+                                block.color
+                            )
+                        ];
+                    })
+                )
             );
 
             const blocks = data.availableBlocks.map((blockData, index) => {
