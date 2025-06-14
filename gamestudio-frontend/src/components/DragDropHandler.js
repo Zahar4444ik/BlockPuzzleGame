@@ -140,7 +140,6 @@ const handleRemoveBlock = async ({
             grid: grid,
             availableBlocks: blocks,
             placedBlocks: board.getPlacedBlocks(),
-            score: 0,
             hasWon: hasWon
         };
 
