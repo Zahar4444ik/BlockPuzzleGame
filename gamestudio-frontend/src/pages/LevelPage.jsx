@@ -102,6 +102,7 @@ const LevelPage = () => {
 
         // Add winBonus to existing score
         const newScore = currScore + winBonus;
+        setCurrScore(newScore);
 
         // Update player with new score and incremented gamesPlayed
         const updatedPlayerDTO = {
@@ -241,6 +242,8 @@ const LevelPage = () => {
                                                     setAvailableBlocks,
                                                     hasWon,
                                                     setHasWon,
+                                                    currScore,
+                                                    setCurrScore,
                                                 });
                                             }}
                                             style={{

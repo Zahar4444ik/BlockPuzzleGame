@@ -121,7 +121,9 @@ const handleRemoveBlock = async ({
                                      setBoard,
                                      setAvailableBlocks,
                                      hasWon,
-                                     setHasWon
+                                     setHasWon,
+                                     currScore,
+                                     setCurrScore
                                  }) => {
     if (hasWon) return false;
 
@@ -158,6 +160,7 @@ const handleRemoveBlock = async ({
         setBoard(updatedState.board);
         setAvailableBlocks(updatedState.availableBlocks);
         setHasWon(updatedState.hasWon);
+        setCurrScore(currScore - 5);
         return true;
     } catch (error) {
         console.error("Error removing block:", error);
