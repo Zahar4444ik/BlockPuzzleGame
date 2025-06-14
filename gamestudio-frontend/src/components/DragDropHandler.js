@@ -58,7 +58,9 @@ const handleDrop = async ({
                               setBoard,
                               setAvailableBlocks,
                               hasWon,
-                              setHasWon
+                              setHasWon,
+                              currScore,
+                              setCurrScore
                           }) => {
     if (hasWon) return false;
     e.preventDefault();
@@ -102,10 +104,11 @@ const handleDrop = async ({
         setBoard(updatedState.board);
         setAvailableBlocks(updatedState.availableBlocks);
         setHasWon(updatedState.hasWon);
+        setCurrScore(currScore + 5);
         return true;
     } catch (error) {
         console.error("Error placing block:", error);
-        alert("Failed to place block. Please try again.");
+        alert("Error placing block. Please try again.");
         return false;
     }
 };

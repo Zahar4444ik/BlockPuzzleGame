@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../assets/css/AnyLevelPage.css";
 import GameDataReceiver from "../components/GameDataReceiver";
@@ -19,6 +19,8 @@ const LevelPage = () => {
     const [hasWon, setHasWon] = useState(false);
     const { setStats } = usePlayerStats();
 
+    const [currScore, setCurrScore] = useState(0);
+
     // Save score when hasWon becomes true
     useEffect(() => {
         if (hasWon && !scoreSaved) {
@@ -27,9 +29,11 @@ const LevelPage = () => {
         }
     }, [hasWon, scoreSaved]);
 
-    const handleDataReceived = (newBoard, newBlocks) => {
+    const handleDataReceived = useCallback(async (newBoard, newBlocks) => {
         console.log("Data received - Initial board:", newBoard.getGrid(), "Blocks:", newBlocks);
-    };
+        const score = await getCurrentScore();
+        setCurrScore(score);
+    }, []);
 
     const getDisplayBlocks = (blocks) => {
         const leftBlocks = blocks.slice(0, 3); // First 3 blocks
@@ -46,6 +50,22 @@ const LevelPage = () => {
     const handleExit = () => {
         navigate("/levels");
     };
+
+    const getCurrentScore = async () => {
+        const nickname = await getCurrentNickname();
+        if (!nickname) {
+            console.error("No nickname found");
+            return 0;
+        }
+
+        try {
+            const playerData = await getPlayerData(nickname);
+            return playerData.score || 0;
+        } catch (error) {
+            console.error("Failed to fetch player data:", error);
+            return 0;
+        }
+    }
 
     // Function to save score when won
     const saveScore = async () => {
@@ -81,8 +101,7 @@ const LevelPage = () => {
         }
 
         // Add winBonus to existing score
-        const currentScore = playerData.score || 0;
-        const newScore = currentScore + winBonus;
+        const newScore = currScore + winBonus;
 
         // Update player with new score and incremented gamesPlayed
         const updatedPlayerDTO = {
@@ -129,6 +148,10 @@ const LevelPage = () => {
                 return (
                     <div className="level-page">
                         <h1>{difficulty} Level</h1>
+                        <div className="score-display">
+                            <span className="score-label">Score: </span>
+                            <span className="score-value">{currScore}</span>
+                        </div>
                         {hasWon && (
                             <div className="win-overlay">
                                 <div className="win-message">
@@ -204,6 +227,8 @@ const LevelPage = () => {
                                                 setAvailableBlocks,
                                                 hasWon,
                                                 setHasWon,
+                                                currScore,
+                                                setCurrScore,
                                             })}
                                             onContextMenu={(e) => {
                                                 e.preventDefault();
